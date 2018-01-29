@@ -7,8 +7,8 @@ To rank the best games of the year, a Bayesian Rating is computed [on RPGCodex](
 ## Prior
 
 Our prior is computed as follows:
-* regarding the average scores, the prior is the median,
-* regarding the numbers of votes, the prior is the average.
+* regarding the average score, the prior is the median of average scores,
+* regarding the number of votes, the prior is the average of numbers of votes.
 
 ## References
 
