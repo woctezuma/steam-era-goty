@@ -10,6 +10,10 @@ Our prior is computed as follows:
 * regarding the average score, the prior is the median of average scores,
 * regarding the number of votes, the prior is the average of numbers of votes.
 
+## Caveat
+
+The original data consists in sets of GOTY candidates, which happen to be ranked. As pointed out by [Durante](https://www.resetera.com/posts/3904799/), interpreting the ranks as a score leads to undesirable properties.
+
 ## References
 
 * https://fulmicoton.com/posts/bayesian_rating/
