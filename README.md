@@ -4,6 +4,12 @@
 
 To rank the best games of the year, a Bayesian Rating is computed [on RPGCodex](http://www.rpgcodex.net/content.php?id=10819), which provides a solid ranking. However, this methodology is not applied [on SteamGAF/ERA](https://www.resetera.com/threads/steamera-games-of-the-year-awards-2017.19342/), and a sum of scores is applied instead (think Eurovision). Our goal is to use the data shown on SteamGAF/ERA and re-rank games with a Bayesian Rating.
 
+## Prior
+
+Our prior is computed as follows:
+* regarding the average scores, the prior is the median,
+* regarding the numbers of votes, the prior is the average.
+
 ## References
 
 * https://fulmicoton.com/posts/bayesian_rating/
