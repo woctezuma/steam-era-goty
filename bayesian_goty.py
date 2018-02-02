@@ -4,10 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def load_input(filename):
+def load_input(filename, file_encoding='utf8'):
     data = []
 
-    with open(filename, 'r', encoding='utf8') as f:
+    with open(filename, 'r', encoding=file_encoding) as f:
         for line in f.readlines():
             line = line.strip()
             # Remove empty lines and comments
