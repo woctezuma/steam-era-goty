@@ -11,7 +11,7 @@ def load_input(filename, file_encoding='utf8'):
         for line in f.readlines():
             line = line.strip()
             # Remove empty lines and comments
-            if len(line) > 0 and line[0] != '#':
+            if len(line) > 0 and line[0:2] != '# ':
                 data.append(line)
 
     return data
