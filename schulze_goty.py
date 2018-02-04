@@ -72,6 +72,24 @@ def list_all_game_names(votes):
     return game_names
 
 
+def remove_invalid_voters(votes):
+    invalid_voters = set()
+
+    for voter in votes.keys():
+        positions_per_vote = list(votes[voter].values())
+        for position_per_vote in positions_per_vote:
+            if position_per_vote != '' and len(
+                    [game_name for game_name in positions_per_vote if game_name == position_per_vote]) > 1:
+                invalid_voters.add(voter)
+                print(voter)
+                break
+
+    for voter in invalid_voters:
+        votes.pop(voter)
+
+    return votes
+
+
 def main():
     filename = 'votes_with_ids/steam_resetera_2017_goty_votes.csv'
     file_encoding = 'ansi'
@@ -83,7 +101,7 @@ def main():
     # To check game names for typos or duplicates. If a problem is detected, then you have to edit fix_typos()
     game_names = list_all_game_names(votes)
 
-    print(sorted(game_names, key=lambda x: len(x)))
+    votes = remove_invalid_voters(votes)
 
     # TODO apply https://github.com/bradbeattie/python-vote-core
 
