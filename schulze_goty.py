@@ -17,12 +17,59 @@ def parse_votes(data, num_games_per_voter=5):
             position = num_games_per_voter - i
 
             raw_name = voted_games[i]
-            list_without_punctuation = re.split('\W+', raw_name)
-            name_without_punctuation = ' '.join(list_without_punctuation).strip()
 
-            votes[voter_name][position] = name_without_punctuation
+            # Remove punctuation
+            list_without_punctuation = re.split('\W+', raw_name)
+            # Remove small words
+            word_limit = 3
+            filtered_list = [word.strip() for word in list_without_punctuation if len(word) > word_limit]
+            name_without_punctuation = ' '.join(filtered_list).strip()
+
+            # Lower case
+            formatted_name = name_without_punctuation.lower()
+
+            formatted_name = fix_typos(formatted_name)
+
+            votes[voter_name][position] = formatted_name.strip()
 
     return votes
+
+
+def fix_typos(game_name):
+    # Objective: fix common typos
+
+    game_name = game_name.replace('ii', '2')
+    game_name = game_name.replace('orginal', 'original')
+    game_name = game_name.replace('collossus', 'colossus')
+    game_name = game_name.replace('eith', 'edith')
+    game_name = game_name.replace('nemunera', 'numenera')
+    game_name = game_name.replace('assassins', 'assassin')
+    game_name = game_name.replace('the new colossus', '')
+    game_name = game_name.replace('senua sacrifice', '')
+    game_name = game_name.replace('bride moon', '')
+    game_name = game_name.replace('complete edition', '')
+    game_name = game_name.replace('playerunkown', 'playerunknown')
+    game_name = game_name.replace('player unknown', 'playerunknown')
+    game_name = game_name.replace('pubg', 'playerunknown battlegrounds')
+    game_name = game_name.replace('biohazard', '')
+    game_name = game_name.replace('resident evil   resident evil', 'resident evil')
+
+    if game_name == 'trails' or game_name == 'legend heroes trails':
+        game_name = 'legend heroes trails in the sky'
+
+    return game_name
+
+
+def list_all_game_names(votes):
+    game_names = set()
+
+    for vote_per_voter in votes.values():
+        for position_per_vote in vote_per_voter.values():
+            game_names.add(position_per_vote)
+
+    game_names = sorted(game_names)
+
+    return game_names
 
 
 def main():
@@ -33,9 +80,10 @@ def main():
 
     votes = parse_votes(data)
 
-    print(votes)
+    # To check game names for typos or duplicates. If a problem is detected, then you have to edit fix_typos()
+    game_names = list_all_game_names(votes)
 
-    # TODO check game names for typos
+    print(sorted(game_names, key=lambda x: len(x)))
 
     # TODO apply https://github.com/bradbeattie/python-vote-core
 
