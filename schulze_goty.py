@@ -3,18 +3,18 @@ import re
 from bayesian_goty import load_input
 
 
-def parse_votes(data, num_games_per_voter = 5):
+def parse_votes(data, num_games_per_voter=5):
     votes = dict()
 
     for element in data:
         tokens = re.split('(;)', element)
 
         voter_name = tokens[0]
-        voted_games = [tokens[2*(i+1)] for i in range(num_games_per_voter)]
+        voted_games = [tokens[2 * (i + 1)] for i in range(num_games_per_voter)]
 
         votes[voter_name] = dict()
         for i in range(len(voted_games)):
-            position = num_games_per_voter-i
+            position = num_games_per_voter - i
 
             raw_name = voted_games[i]
             list_without_punctuation = re.split('\W+', raw_name)
@@ -23,6 +23,7 @@ def parse_votes(data, num_games_per_voter = 5):
             votes[voter_name][position] = name_without_punctuation
 
     return votes
+
 
 def main():
     filename = 'votes_with_ids/steam_resetera_2017_goty_votes.csv'
@@ -34,9 +35,9 @@ def main():
 
     print(votes)
 
-    #TODO check game names for typos
+    # TODO check game names for typos
 
-    #TODO apply https://github.com/bradbeattie/python-vote-core
+    # TODO apply https://github.com/bradbeattie/python-vote-core
 
     return
 
