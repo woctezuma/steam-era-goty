@@ -242,7 +242,7 @@ def main():
 
     matches = precompute_matches(raw_votes, steamspy_database, num_closest_neighbors)
 
-    display_matches(matches)
+    # display_matches(matches)
 
     normalized_votes = normalize_votes(raw_votes, matches)
 
