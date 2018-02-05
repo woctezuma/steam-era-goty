@@ -1,10 +1,11 @@
 import re
 
 from bayesian_goty import load_input
+from download_json import getTodaysSteamSpyData
 
 
-def parse_votes(data, num_games_per_voter=5):
-    votes = dict()
+def load_votes(data, num_games_per_voter=5):
+    raw_votes = dict()
 
     for element in data:
         tokens = re.split('(;)', element)
@@ -12,17 +13,33 @@ def parse_votes(data, num_games_per_voter=5):
         voter_name = tokens[0]
         voted_games = [tokens[2 * (i + 1)] for i in range(num_games_per_voter)]
 
-        votes[voter_name] = dict()
+        raw_votes[voter_name] = dict()
         for i in range(len(voted_games)):
             position = num_games_per_voter - i
 
-            raw_name = voted_games[i]
+            game_name = voted_games[i]
+            raw_votes[voter_name][position] = game_name
 
-            formatted_name = format_game_name(raw_name)
+    return raw_votes
 
-            votes[voter_name][position] = formatted_name
 
-    return votes
+def parse_votes(raw_votes):
+    steamspy_database = getTodaysSteamSpyData()
+
+    parsed_votes = dict()
+
+    for voter_name in raw_votes.keys():
+        parsed_votes[voter_name] = dict()
+        for (position, game_name) in raw_votes[voter_name].items():
+
+            if game_name != '':
+                inferred_appID = find_closest_appID(game_name, steamspy_database)
+
+                parsed_votes[voter_name][position] = inferred_appID
+            else:
+                parsed_votes[voter_name][position] = None
+
+    return parsed_votes
 
 
 def format_game_name(raw_name, word_limit=3):
@@ -102,18 +119,45 @@ def remove_invalid_voters(votes):
     return votes
 
 
+def find_closest_appID(game_name_input, steamspy_database):
+    from Levenshtein import distance
+
+    dist = dict()
+
+    for appID in steamspy_database.keys():
+        str = steamspy_database[appID]['name']
+        dist[appID] = distance(game_name_input, str)
+
+    sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
+
+    closest_appID = int(sorted_appIDS[0])
+
+    return closest_appID
+
+
+def check_string_matching(parsed_votes, raw_votes):
+    steamspy_database = getTodaysSteamSpyData()
+
+    for voter in parsed_votes.keys():
+        for (position, appID_int) in parsed_votes[voter].items():
+            if appID_int is not None:
+                appID = str(appID_int)
+                print('appID:' + appID + '\t' + steamspy_database[appID]['name'] + '\t' + raw_votes[voter][position])
+
+    return
+
+
 def main():
     filename = 'votes_with_ids/steam_resetera_2017_goty_votes.csv'
     file_encoding = 'ansi'
 
     data = load_input(filename, file_encoding)
 
-    votes = parse_votes(data)
+    raw_votes = load_votes(data)
 
-    # Manual check for typos
-    game_names = list_all_game_names_for_check(votes)
+    parsed_votes = parse_votes(raw_votes)
 
-    votes = remove_invalid_voters(votes)
+    check_string_matching(parsed_votes, raw_votes)
 
     # TODO apply https://github.com/bradbeattie/python-vote-core
 
