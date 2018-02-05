@@ -82,15 +82,18 @@ def build_matches_for_display(raw_votes, normalized_votes, steamspy_database):
 
 
 def display_matches(matches):
-    matches = sorted(matches, key=lambda x: x['match_distance'])
+    matches = sorted(matches, key=lambda x: x['match_distance'] / (1 + len(x['input_name'])))
 
     for element in matches:
         dist = element['match_distance']
         if dist > 0:
-            print(element['input_name']
-                  + '-> appID:' + element['matched_appID']
-                  + ' ; name: ' + element['matched_name']
-                  + '(' + 'distance:' + str(dist) + ')')
+            game_name = element['input_name']
+            print(game_name
+                  + ' (' + 'length:' + str(len(game_name)) + ')'
+                  + '---> '
+                  + element['matched_name']
+                  + ' (appID: ' + element['matched_appID']
+                  + ' ; ' + 'distance:' + str(dist) + ')')
 
     return
 
