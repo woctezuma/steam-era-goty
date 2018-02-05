@@ -172,6 +172,14 @@ def find_hard_coded_appID(game_name_input):
 
 def adapt_votes_format_for_schulze_computations(normalized_votes):
     candidate_names = set()
+
+    for voter in normalized_votes.keys():
+        current_ballots = normalized_votes[voter]['ballots']
+        for position in sorted(current_ballots.keys()):
+            appID = current_ballots[position]
+            if appID is not None:
+                candidate_names.add(appID)
+
     weighted_ranks = []
 
     for voter in normalized_votes.keys():
@@ -181,7 +189,6 @@ def adapt_votes_format_for_schulze_computations(normalized_votes):
         for position in sorted(current_ballots.keys()):
             appID = current_ballots[position]
             if appID is not None:
-                candidate_names.add(appID)
                 current_ranking.append([appID])
                 currently_seen_candidates.add(appID)
         remaining_appIDs = candidate_names.difference(currently_seen_candidates)
