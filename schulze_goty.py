@@ -63,7 +63,13 @@ def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors
 
     sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
 
-    closest_appID = sorted_appIDS[0:num_closest_neighbors]
+    if check_database_of_problematic_game_names(game_name_input):
+        closest_appID = find_hard_coded_appID(game_name_input)
+        if num_closest_neighbors > 1:
+            closest_appID.extend(sorted_appIDS[0:(num_closest_neighbors - 1)])
+    else:
+        closest_appID = sorted_appIDS[0:num_closest_neighbors]
+
     closest_distance = [dist[appID] for appID in closest_appID]
 
     return (closest_appID, closest_distance)
@@ -103,11 +109,12 @@ def display_matches(matches):
 
     for game in sorted_keys:
         element = matches[game]
-        dist_reference = element['match_distance'][neighbor_reference_index]
-        appID_reference = element['matched_appID'][neighbor_reference_index]
 
-        if dist_reference > 0 and check_database_of_mismatches(appID_reference):
-            game_name = element['input_name']
+        dist_reference = element['match_distance'][neighbor_reference_index]
+        game_name = element['input_name']
+
+        if dist_reference > 0 and check_database_of_problematic_game_names(game_name):
+
             print('\n' + game_name
                   + ' (' + 'length:' + str(len(game_name)) + ')'
                   + ' ---> ', end='')
@@ -120,18 +127,45 @@ def display_matches(matches):
     return
 
 
-def check_database_of_mismatches(appID):
-    # Hard-coded list of appID which are wrongly matched to votes (cf. wrong_matches.txt)
-    mismatches = [
-        "221040", "2270", "272040", "272040",
-        "277930", "321040", "364360", "364360",
-        "400760", "405820", "522030", "566220",
-        "713080", "713080", "742150", "9500"
+def check_database_of_problematic_game_names(game_name):
+    # Hard-coded list of game names which are wrongly matched with Levenshtein distance (cf. wrong_matches.txt)
+    problematic_game_names = [
+        "Death of the Outsider", "Hellblade", "PUBG", "Turok 2", "Wolfenstein II",
+        "Telltale's Guardians of the Galaxy", "Trails in the Sky the 3rd",
+        "Nioh", "Nioh: Complete Edition",
+        "Okami", "Okami HD",
+        "Resident Evil 7", "Resident Evil VII", "Resident Evil VII Biohazard",
+        "Total War: Warhammer 2", "Total war:warhammer 2"
     ]
 
-    is_a_mismatch = bool(appID in mismatches)
+    is_a_problematic_game_name = bool(game_name in problematic_game_names)
 
-    return is_a_mismatch
+    return is_a_problematic_game_name
+
+
+def find_hard_coded_appID(game_name_input):
+    hard_coded_dict = {  # TODO
+        "Death of the Outsider": "",
+        "Hellblade": "",
+        "Nioh": "",
+        "Nioh: Complete Edition": "",
+        "Okami HD": "",
+        "Okami": "",
+        "PUBG": "",
+        "Resident Evil 7": "",
+        "Resident Evil VII Biohazard": "",
+        "Resident Evil VII": "",
+        "Telltale's Guardians of the Galaxy": "",
+        "Total War: Warhammer 2": "",
+        "Total war:warhammer 2": "",
+        "Trails in the Sky the 3rd": "",
+        "Turok 2": "",
+        "Wolfenstein II": "",
+    }
+
+    hard_coded_appID = hard_coded_dict[game_name_input]
+
+    return hard_coded_appID
 
 
 def main():
