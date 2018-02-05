@@ -55,7 +55,8 @@ def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors
 
     for appID in steamspy_database.keys():
         str = steamspy_database[appID]['name']
-        dist[appID] = lv.distance(game_name_input, str)
+        # Compare names in lower cases, to avoid mismatches for Tekken vs. TEKKEN, or Warhammer vs. WARHAMMER
+        dist[appID] = lv.distance(game_name_input.lower(), str.lower())
 
     sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
 
