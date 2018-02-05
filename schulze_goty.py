@@ -1,4 +1,4 @@
-def load_votes(data, num_games_per_voter=5):
+def parse_votes(data, num_games_per_voter=5):
     import re
 
     raw_votes = dict()
@@ -19,21 +19,25 @@ def load_votes(data, num_games_per_voter=5):
     return raw_votes
 
 
-def parse_votes(raw_votes, steamspy_database):
-    parsed_votes = dict()
+def normalize_votes(raw_votes, steamspy_database):
+    normalized_votes = dict()
 
     for voter_name in raw_votes.keys():
-        parsed_votes[voter_name] = dict()
+        normalized_votes[voter_name] = dict()
+        normalized_votes[voter_name]['ballots'] = dict()
+        normalized_votes[voter_name]['distances'] = dict()
         for (position, game_name) in raw_votes[voter_name].items():
 
             if game_name != '':
-                inferred_appID = find_closest_appID(game_name, steamspy_database)
+                (closest_appID, closest_distance) = find_closest_appID(game_name, steamspy_database)
 
-                parsed_votes[voter_name][position] = inferred_appID
+                normalized_votes[voter_name]['ballots'][position] = closest_appID
+                normalized_votes[voter_name]['distances'][position] = closest_distance
             else:
-                parsed_votes[voter_name][position] = None
+                normalized_votes[voter_name]['ballots'][position] = None
+                normalized_votes[voter_name]['distances'][position] = None
 
-    return parsed_votes
+    return normalized_votes
 
 
 def find_closest_appID(game_name_input, steamspy_database):
@@ -47,17 +51,40 @@ def find_closest_appID(game_name_input, steamspy_database):
 
     sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
 
-    closest_appID = int(sorted_appIDS[0])
+    closest_appID_str = sorted_appIDS[0]
 
-    return closest_appID
+    closest_appID = int(closest_appID_str)
+    closest_distance = dist[closest_appID_str]
+
+    return (closest_appID, closest_distance)
 
 
-def check_game_name_matching(raw_votes, parsed_votes, steamspy_database):
-    for voter in parsed_votes.keys():
-        for (position, appID_int) in parsed_votes[voter].items():
+def build_matches_for_display(raw_votes, normalized_votes, steamspy_database):
+    matches = []
+    for voter in normalized_votes.keys():
+        for (position, appID_int) in normalized_votes[voter]['ballots'].items():
             if appID_int is not None:
                 appID = str(appID_int)
-                print('appID:' + appID + '\t' + steamspy_database[appID]['name'] + '\t' + raw_votes[voter][position])
+                element = dict()
+                element['input_name'] = raw_votes[voter][position]
+                element['matched_appID'] = appID
+                element['matched_name'] = steamspy_database[appID]['name']
+                element['match_distance'] = normalized_votes[voter]['distances'][position]
+                matches.append(element)
+
+    return matches
+
+
+def display_matches(matches):
+    matches = sorted(matches, key=lambda x: x['match_distance'])
+
+    for element in matches:
+        dist = element['match_distance']
+        if dist > 0:
+            print(element['input_name']
+                  + '-> appID:' + element['matched_appID']
+                  + ' ; name: ' + element['matched_name']
+                  + '(' + 'distance:' + str(dist) + ')')
 
     return
 
@@ -74,11 +101,13 @@ def main():
 
     data = load_input(filename, file_encoding)
 
-    raw_votes = load_votes(data)
+    raw_votes = parse_votes(data)
 
-    parsed_votes = parse_votes(raw_votes, steamspy_database)
+    normalized_votes = normalize_votes(raw_votes, steamspy_database)
 
-    check_game_name_matching(raw_votes, parsed_votes, steamspy_database)
+    matches = build_matches_for_display(raw_votes, normalized_votes, steamspy_database)
+
+    display_matches(matches)
 
     # TODO apply https://github.com/bradbeattie/python-vote-core
 
