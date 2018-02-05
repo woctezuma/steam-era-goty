@@ -53,10 +53,13 @@ def normalize_votes(raw_votes, matches):
 def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors=1):
     dist = dict()
 
+    lower_case_input = game_name_input.lower()
+
     for appID in steamspy_database.keys():
         str = steamspy_database[appID]['name']
+
         # Compare names in lower cases, to avoid mismatches for Tekken vs. TEKKEN, or Warhammer vs. WARHAMMER
-        dist[appID] = lv.distance(game_name_input.lower(), str.lower())
+        dist[appID] = lv.distance(lower_case_input, str.lower())
 
     sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
 
@@ -100,15 +103,16 @@ def display_matches(matches):
 
     for game in sorted_keys:
         element = matches[game]
-        dist = element['match_distance'][neighbor_reference_index]
+        dist_reference = element['match_distance'][neighbor_reference_index]
         appID_reference = element['matched_appID'][neighbor_reference_index]
 
-        if dist > 0 and check_database_of_mismatches(appID_reference):
+        if dist_reference > 0 and check_database_of_mismatches(appID_reference):
             game_name = element['input_name']
             print('\n' + game_name
                   + ' (' + 'length:' + str(len(game_name)) + ')'
                   + ' ---> ', end='')
             for neighbor_index in range(len(element['match_distance'])):
+                dist = element['match_distance'][neighbor_index]
                 print(element['matched_name'][neighbor_index]
                       + ' (appID: ' + element['matched_appID'][neighbor_index]
                       + ' ; ' + 'distance:' + str(dist) + ')', end='\t')
