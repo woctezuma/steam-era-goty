@@ -1,3 +1,6 @@
+import Levenshtein as lv
+
+
 def parse_votes(data, num_games_per_voter=5):
     import re
 
@@ -41,13 +44,11 @@ def normalize_votes(raw_votes, steamspy_database):
 
 
 def find_closest_appID(game_name_input, steamspy_database):
-    from Levenshtein import distance
-
     dist = dict()
 
     for appID in steamspy_database.keys():
         str = steamspy_database[appID]['name']
-        dist[appID] = distance(game_name_input, str)
+        dist[appID] = lv.distance(game_name_input, str)
 
     sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
 
@@ -105,9 +106,13 @@ def main():
 
     normalized_votes = normalize_votes(raw_votes, steamspy_database)
 
+    # Check
+
     matches = build_matches_for_display(raw_votes, normalized_votes, steamspy_database)
 
     display_matches(matches)
+
+    # TODO Manual fixes
 
     # TODO apply https://github.com/bradbeattie/python-vote-core
 
