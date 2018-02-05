@@ -105,7 +105,7 @@ def display_matches(matches):
             game_name = element['input_name']
             print('\n' + game_name
                   + ' (' + 'length:' + str(len(game_name)) + ')'
-                  + '---> ', end='')
+                  + ' ---> ', end='')
             for neighbor_index in range(len(element['match_distance'])):
                 print(element['matched_name'][neighbor_index]
                       + ' (appID: ' + element['matched_appID'][neighbor_index]
@@ -123,7 +123,7 @@ def main():
     raw_votes = parse_votes(data)
 
     steamspy_database = getTodaysSteamSpyData()
-    num_closest_neighbors = 2
+    num_closest_neighbors = 1
 
     matches = precompute_matches(raw_votes, steamspy_database, num_closest_neighbors)
 
