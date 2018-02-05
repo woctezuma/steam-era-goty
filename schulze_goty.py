@@ -101,7 +101,9 @@ def display_matches(matches):
     for game in sorted_keys:
         element = matches[game]
         dist = element['match_distance'][neighbor_reference_index]
-        if dist > 0:
+        appID_reference = element['matched_appID'][neighbor_reference_index]
+
+        if dist > 0 and check_database_of_mismatches(appID_reference):
             game_name = element['input_name']
             print('\n' + game_name
                   + ' (' + 'length:' + str(len(game_name)) + ')'
@@ -114,6 +116,20 @@ def display_matches(matches):
     return
 
 
+def check_database_of_mismatches(appID):
+    # Hard-coded list of appID which are wrongly matched to votes (cf. wrong_matches.txt)
+    mismatches = [
+        "221040", "2270", "272040", "272040",
+        "277930", "321040", "364360", "364360",
+        "400760", "405820", "522030", "566220",
+        "713080", "713080", "742150", "9500"
+    ]
+
+    is_a_mismatch = bool(appID in mismatches)
+
+    return is_a_mismatch
+
+
 def main():
     filename = 'votes_with_ids/steam_resetera_2017_goty_votes.csv'
     file_encoding = 'ansi'
@@ -123,7 +139,7 @@ def main():
     raw_votes = parse_votes(data)
 
     steamspy_database = getTodaysSteamSpyData()
-    num_closest_neighbors = 1
+    num_closest_neighbors = 3
 
     matches = precompute_matches(raw_votes, steamspy_database, num_closest_neighbors)
 
