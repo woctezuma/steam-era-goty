@@ -64,7 +64,7 @@ def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors
     sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
 
     if check_database_of_problematic_game_names(game_name_input):
-        closest_appID = find_hard_coded_appID(game_name_input)
+        closest_appID = [find_hard_coded_appID(game_name_input)]
         if num_closest_neighbors > 1:
             closest_appID.extend(sorted_appIDS[0:(num_closest_neighbors - 1)])
     else:
@@ -127,41 +127,41 @@ def display_matches(matches):
     return
 
 
-def check_database_of_problematic_game_names(game_name):
+def get_hard_coded_appID_dict():
     # Hard-coded list of game names which are wrongly matched with Levenshtein distance (cf. wrong_matches.txt)
-    problematic_game_names = [
-        "Death of the Outsider", "Hellblade", "PUBG", "Turok 2", "Wolfenstein II",
-        "Telltale's Guardians of the Galaxy", "Trails in the Sky the 3rd",
-        "Nioh", "Nioh: Complete Edition",
-        "Okami", "Okami HD",
-        "Resident Evil 7", "Resident Evil VII", "Resident Evil VII Biohazard",
-        "Total War: Warhammer 2", "Total war:warhammer 2"
-    ]
 
-    is_a_problematic_game_name = bool(game_name in problematic_game_names)
+    hard_coded_dict = {
+        "Death of the Outsider": "614570",
+        "Hellblade": "414340",
+        "Nioh": "485510",
+        "Nioh: Complete Edition": "485510",
+        "Okami HD": "587620",
+        "Okami": "587620",
+        "PUBG": "578080",
+        "Resident Evil 7": "418370",
+        "Resident Evil VII Biohazard": "418370",
+        "Resident Evil VII": "418370",
+        "Telltale's Guardians of the Galaxy": "579950",
+        "Total War: Warhammer 2": "594570",
+        "Total war:warhammer 2": "594570",
+        "Trails in the Sky the 3rd": "436670",
+        "Turok 2": "405830",
+        "Wolfenstein II": "612880",
+    }
+
+    return hard_coded_dict
+
+
+def check_database_of_problematic_game_names(game_name):
+    hard_coded_dict = get_hard_coded_appID_dict()
+
+    is_a_problematic_game_name = bool(game_name in hard_coded_dict.keys())
 
     return is_a_problematic_game_name
 
 
 def find_hard_coded_appID(game_name_input):
-    hard_coded_dict = {  # TODO
-        "Death of the Outsider": "",
-        "Hellblade": "",
-        "Nioh": "",
-        "Nioh: Complete Edition": "",
-        "Okami HD": "",
-        "Okami": "",
-        "PUBG": "",
-        "Resident Evil 7": "",
-        "Resident Evil VII Biohazard": "",
-        "Resident Evil VII": "",
-        "Telltale's Guardians of the Galaxy": "",
-        "Total War: Warhammer 2": "",
-        "Total war:warhammer 2": "",
-        "Trails in the Sky the 3rd": "",
-        "Turok 2": "",
-        "Wolfenstein II": "",
-    }
+    hard_coded_dict = get_hard_coded_appID_dict()
 
     hard_coded_appID = hard_coded_dict[game_name_input]
 
@@ -184,8 +184,6 @@ def main():
     display_matches(matches)
 
     normalized_votes = normalize_votes(raw_votes, matches)
-
-    # TODO Manual fixes cf. wrong_matches
 
     # TODO apply https://github.com/bradbeattie/python-vote-core
 
