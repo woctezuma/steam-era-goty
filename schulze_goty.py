@@ -183,16 +183,18 @@ def adapt_votes_format_for_schulze_computations(normalized_votes):
     weighted_ranks = []
 
     for voter in normalized_votes.keys():
-        current_ranking = []
         current_ballots = normalized_votes[voter]['ballots']
+        current_ranking = []
         currently_seen_candidates = set()
         for position in sorted(current_ballots.keys()):
             appID = current_ballots[position]
             if appID is not None:
                 current_ranking.append([appID])
                 currently_seen_candidates.add(appID)
+
         remaining_appIDs = candidate_names.difference(currently_seen_candidates)
         current_ranking.append(remaining_appIDs)
+
         current_weight = 1
         weighted_ranks.append((current_ranking, current_weight))
 
