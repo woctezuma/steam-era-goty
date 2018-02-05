@@ -1,5 +1,8 @@
 import Levenshtein as lv
 
+from bayesian_goty import load_input
+from download_json import getTodaysSteamSpyData
+
 
 def parse_votes(data, num_games_per_voter=5):
     import re
@@ -23,6 +26,9 @@ def parse_votes(data, num_games_per_voter=5):
 
 
 def normalize_votes(raw_votes, matches):
+    # Index of the first neighbor
+    neighbor_reference_index = 0
+
     normalized_votes = dict()
 
     for voter_name in raw_votes.keys():
@@ -33,8 +39,10 @@ def normalize_votes(raw_votes, matches):
 
             if game_name in matches.keys():
 
-                normalized_votes[voter_name]['ballots'][position] = matches[game_name]['matched_appID']
-                normalized_votes[voter_name]['distances'][position] = matches[game_name]['match_distance']
+                normalized_votes[voter_name]['ballots'][position] = matches[game_name]['matched_appID'][
+                    neighbor_reference_index]
+                normalized_votes[voter_name]['distances'][position] = matches[game_name]['match_distance'][
+                    neighbor_reference_index]
             else:
                 normalized_votes[voter_name]['ballots'][position] = None
                 normalized_votes[voter_name]['distances'][position] = None
@@ -42,7 +50,7 @@ def normalize_votes(raw_votes, matches):
     return normalized_votes
 
 
-def find_closest_appID(game_name_input, steamspy_database):
+def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors=1):
     dist = dict()
 
     for appID in steamspy_database.keys():
@@ -51,15 +59,13 @@ def find_closest_appID(game_name_input, steamspy_database):
 
     sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
 
-    closest_appID_str = sorted_appIDS[0]
-
-    closest_appID = int(closest_appID_str)
-    closest_distance = dist[closest_appID_str]
+    closest_appID = sorted_appIDS[0:num_closest_neighbors]
+    closest_distance = [dist[appID] for appID in closest_appID]
 
     return (closest_appID, closest_distance)
 
 
-def precompute_matches(raw_votes, steamspy_database):
+def precompute_matches(raw_votes, steamspy_database, num_closest_neighbors=1):
     seen_game_names = set()
     matches = dict()
 
@@ -69,14 +75,13 @@ def precompute_matches(raw_votes, steamspy_database):
                 seen_game_names.add(raw_name)
 
                 if raw_name != '':
-                    (closest_appID_int, closest_distance) = find_closest_appID(raw_name, steamspy_database)
-
-                    appID = str(closest_appID_int)
+                    (closest_appID, closest_distance) = find_closest_appID(raw_name, steamspy_database,
+                                                                           num_closest_neighbors)
 
                     element = dict()
                     element['input_name'] = raw_name
-                    element['matched_appID'] = appID
-                    element['matched_name'] = steamspy_database[appID]['name']
+                    element['matched_appID'] = closest_appID
+                    element['matched_name'] = [steamspy_database[appID]['name'] for appID in closest_appID]
                     element['match_distance'] = closest_distance
 
                     matches[raw_name] = element
@@ -85,20 +90,25 @@ def precompute_matches(raw_votes, steamspy_database):
 
 
 def display_matches(matches):
+    # Index of the neighbor used to sort keys of the matches dictionary
+    neighbor_reference_index = 0
+
     sorted_keys = sorted(matches.keys(),
-                         key=lambda x: matches[x]['match_distance'] / (1 + len(matches[x]['input_name'])))
+                         key=lambda x: matches[x]['match_distance'][neighbor_reference_index] / (
+                                 1 + len(matches[x]['input_name'])))
 
     for game in sorted_keys:
         element = matches[game]
-        dist = element['match_distance']
+        dist = element['match_distance'][neighbor_reference_index]
         if dist > 0:
             game_name = element['input_name']
-            print(game_name
+            print('\n' + game_name
                   + ' (' + 'length:' + str(len(game_name)) + ')'
-                  + '---> '
-                  + element['matched_name']
-                  + ' (appID: ' + element['matched_appID']
-                  + ' ; ' + 'distance:' + str(dist) + ')')
+                  + '---> ', end='')
+            for neighbor_index in range(len(element['match_distance'])):
+                print(element['matched_name'][neighbor_index]
+                      + ' (appID: ' + element['matched_appID'][neighbor_index]
+                      + ' ; ' + 'distance:' + str(dist) + ')', end='\t')
 
     return
 
@@ -107,23 +117,18 @@ def main():
     filename = 'votes_with_ids/steam_resetera_2017_goty_votes.csv'
     file_encoding = 'ansi'
 
-    from download_json import getTodaysSteamSpyData
-
-    steamspy_database = getTodaysSteamSpyData()
-
-    from bayesian_goty import load_input
-
     data = load_input(filename, file_encoding)
 
     raw_votes = parse_votes(data)
 
-    matches = precompute_matches(raw_votes, steamspy_database)
+    steamspy_database = getTodaysSteamSpyData()
+    num_closest_neighbors = 2
 
-    normalized_votes = normalize_votes(raw_votes, matches)
-
-    # Check
+    matches = precompute_matches(raw_votes, steamspy_database, num_closest_neighbors)
 
     display_matches(matches)
+
+    normalized_votes = normalize_votes(raw_votes, matches)
 
     # TODO Manual fixes cf. wrong_matches
 
