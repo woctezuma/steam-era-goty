@@ -124,6 +124,8 @@ def display_matches(matches):
                       + ' (appID: ' + element['matched_appID'][neighbor_index]
                       + ' ; ' + 'distance:' + str(dist) + ')', end='\t')
 
+    print()
+
     return
 
 
@@ -168,6 +170,68 @@ def find_hard_coded_appID(game_name_input):
     return hard_coded_appID
 
 
+def adapt_votes_format_for_schulze_computations(normalized_votes):
+    candidate_names = set()
+    weighted_ranks = []
+
+    for voter in normalized_votes.keys():
+        current_ranking = []
+        current_ballots = normalized_votes[voter]['ballots']
+        currently_seen_candidates = set()
+        for position in sorted(current_ballots.keys()):
+            appID = current_ballots[position]
+            if appID is not None:
+                candidate_names.add(appID)
+                current_ranking.append([appID])
+                currently_seen_candidates.add(appID)
+        remaining_appIDs = candidate_names.difference(currently_seen_candidates)
+        current_ranking.append(remaining_appIDs)
+        current_weight = 1
+        weighted_ranks.append((current_ranking, current_weight))
+
+    candidate_names = list(candidate_names)
+
+    return (candidate_names, weighted_ranks)
+
+
+def compute_schulze_ranking(normalized_votes, steamspy_database):
+    # Reference: https://github.com/mgp/schulze-method
+
+    import schulze
+
+    (candidate_names, weighted_ranks) = adapt_votes_format_for_schulze_computations(normalized_votes)
+
+    schulze_ranking = schulze.compute_ranks(candidate_names, weighted_ranks)
+
+    print_schulze_ranking(schulze_ranking, steamspy_database)
+
+    debug = False
+    if debug:
+        rank_to_check = 0
+
+        for appID in schulze_ranking[rank_to_check]:
+            print(appID)
+            for tuple in weighted_ranks:
+                ranking = tuple[0]
+                if any(appID in rank for rank in ranking):
+                    print(ranking)
+            print()
+
+    return schulze_ranking
+
+
+def print_schulze_ranking(schulze_ranking, steamspy_database):
+    for (rank, appID_group) in enumerate(schulze_ranking):
+        for appID in appID_group:
+            game_name = steamspy_database[appID]['name']
+            print('{0:2} | '.format(rank + 1)
+                  + game_name.strip()
+                  # + ' (appID: ' + appID + ')'
+                  )
+
+    return
+
+
 def main():
     filename = 'votes_with_ids/steam_resetera_2017_goty_votes.csv'
     file_encoding = 'ansi'
@@ -185,7 +249,7 @@ def main():
 
     normalized_votes = normalize_votes(raw_votes, matches)
 
-    # TODO apply https://github.com/bradbeattie/python-vote-core
+    schulze_ranking = compute_schulze_ranking(normalized_votes, steamspy_database)
 
     return
 
