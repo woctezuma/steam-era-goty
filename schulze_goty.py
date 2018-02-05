@@ -61,13 +61,18 @@ def find_closest_appID(game_name_input, steamspy_database):
 
 
 def build_matches_for_display(raw_votes, normalized_votes, steamspy_database):
+    seen_game_names = set()
+
     matches = []
     for voter in normalized_votes.keys():
         for (position, appID_int) in normalized_votes[voter]['ballots'].items():
-            if appID_int is not None:
+            raw_name = raw_votes[voter][position]
+            if appID_int is not None and raw_name not in seen_game_names:
+                seen_game_names.add(raw_name)
+
                 appID = str(appID_int)
                 element = dict()
-                element['input_name'] = raw_votes[voter][position]
+                element['input_name'] = raw_name
                 element['matched_appID'] = appID
                 element['matched_name'] = steamspy_database[appID]['name']
                 element['match_distance'] = normalized_votes[voter]['distances'][position]
@@ -112,7 +117,7 @@ def main():
 
     display_matches(matches)
 
-    # TODO Manual fixes
+    # TODO Manual fixes cf. wrong_matches
 
     # TODO apply https://github.com/bradbeattie/python-vote-core
 
