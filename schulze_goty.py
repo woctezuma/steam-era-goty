@@ -22,7 +22,7 @@ def parse_votes(data, num_games_per_voter=5):
     return raw_votes
 
 
-def normalize_votes(raw_votes, steamspy_database):
+def normalize_votes(raw_votes, matches):
     normalized_votes = dict()
 
     for voter_name in raw_votes.keys():
@@ -31,11 +31,10 @@ def normalize_votes(raw_votes, steamspy_database):
         normalized_votes[voter_name]['distances'] = dict()
         for (position, game_name) in raw_votes[voter_name].items():
 
-            if game_name != '':
-                (closest_appID, closest_distance) = find_closest_appID(game_name, steamspy_database)
+            if game_name in matches.keys():
 
-                normalized_votes[voter_name]['ballots'][position] = closest_appID
-                normalized_votes[voter_name]['distances'][position] = closest_distance
+                normalized_votes[voter_name]['ballots'][position] = matches[game_name]['matched_appID']
+                normalized_votes[voter_name]['distances'][position] = matches[game_name]['match_distance']
             else:
                 normalized_votes[voter_name]['ballots'][position] = None
                 normalized_votes[voter_name]['distances'][position] = None
@@ -60,31 +59,37 @@ def find_closest_appID(game_name_input, steamspy_database):
     return (closest_appID, closest_distance)
 
 
-def build_matches_for_display(raw_votes, normalized_votes, steamspy_database):
+def precompute_matches(raw_votes, steamspy_database):
     seen_game_names = set()
+    matches = dict()
 
-    matches = []
-    for voter in normalized_votes.keys():
-        for (position, appID_int) in normalized_votes[voter]['ballots'].items():
-            raw_name = raw_votes[voter][position]
-            if appID_int is not None and raw_name not in seen_game_names:
+    for voter in raw_votes.keys():
+        for (position, raw_name) in raw_votes[voter].items():
+            if raw_name not in seen_game_names:
                 seen_game_names.add(raw_name)
 
-                appID = str(appID_int)
-                element = dict()
-                element['input_name'] = raw_name
-                element['matched_appID'] = appID
-                element['matched_name'] = steamspy_database[appID]['name']
-                element['match_distance'] = normalized_votes[voter]['distances'][position]
-                matches.append(element)
+                if raw_name != '':
+                    (closest_appID_int, closest_distance) = find_closest_appID(raw_name, steamspy_database)
+
+                    appID = str(closest_appID_int)
+
+                    element = dict()
+                    element['input_name'] = raw_name
+                    element['matched_appID'] = appID
+                    element['matched_name'] = steamspy_database[appID]['name']
+                    element['match_distance'] = closest_distance
+
+                    matches[raw_name] = element
 
     return matches
 
 
 def display_matches(matches):
-    matches = sorted(matches, key=lambda x: x['match_distance'] / (1 + len(x['input_name'])))
+    sorted_keys = sorted(matches.keys(),
+                         key=lambda x: matches[x]['match_distance'] / (1 + len(matches[x]['input_name'])))
 
-    for element in matches:
+    for game in sorted_keys:
+        element = matches[game]
         dist = element['match_distance']
         if dist > 0:
             game_name = element['input_name']
@@ -112,11 +117,11 @@ def main():
 
     raw_votes = parse_votes(data)
 
-    normalized_votes = normalize_votes(raw_votes, steamspy_database)
+    matches = precompute_matches(raw_votes, steamspy_database)
+
+    normalized_votes = normalize_votes(raw_votes, matches)
 
     # Check
-
-    matches = build_matches_for_display(raw_votes, normalized_votes, steamspy_database)
 
     display_matches(matches)
 
