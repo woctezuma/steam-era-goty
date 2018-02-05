@@ -18,6 +18,10 @@ Our prior is computed as follows:
 
 The original data consists in sets of GOTY candidates, which happen to be ranked. As pointed out by [Durante](https://www.resetera.com/posts/3904799/), interpreting the ranks as a score leads to undesirable properties.
 
+### Result
+
+Full result is [here](https://raw.githubusercontent.com/woctezuma/steam-era-goty/master/output.txt).
+
 ## Schulze Method
 
 ### Ranked-choice voting
@@ -28,6 +32,10 @@ The original data consists in sets of GOTY candidates, which happen to be ranked
 
 The original dataset, which consists of the rankings submitted by each user, was used.
 It cannot be shared for privacy concerns.
+
+### Result
+
+Full result is [here](https://raw.githubusercontent.com/woctezuma/steam-era-goty/master/schulze_ranking.txt).
 
 ## References
 
