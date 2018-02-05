@@ -205,18 +205,6 @@ def compute_schulze_ranking(normalized_votes, steamspy_database):
 
     print_schulze_ranking(schulze_ranking, steamspy_database)
 
-    debug = False
-    if debug:
-        rank_to_check = 0
-
-        for appID in schulze_ranking[rank_to_check]:
-            print(appID)
-            for tuple in weighted_ranks:
-                ranking = tuple[0]
-                if any(appID in rank for rank in ranking):
-                    print(ranking)
-            print()
-
     return schulze_ranking
 
 
