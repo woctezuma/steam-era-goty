@@ -18,24 +18,33 @@ def parse_votes(data, num_games_per_voter=5):
 
             raw_name = voted_games[i]
 
-            # Remove punctuation
-            list_without_punctuation = re.split('\W+', raw_name)
-            # Remove small words
-            word_limit = 3
-            filtered_list = [word.strip() for word in list_without_punctuation if len(word) > word_limit]
-            name_without_punctuation = ' '.join(filtered_list).strip()
+            formatted_name = format_game_name(raw_name)
 
-            # Lower case
-            formatted_name = name_without_punctuation.lower()
-
-            formatted_name = fix_typos(formatted_name)
-
-            votes[voter_name][position] = formatted_name.strip()
+            votes[voter_name][position] = formatted_name
 
     return votes
 
 
-def fix_typos(game_name):
+def format_game_name(raw_name, word_limit=3):
+    # Remove punctuation
+    list_without_punctuation = re.split('\W+', raw_name)
+    # Remove small words
+    filtered_list = [word.strip() for word in list_without_punctuation if len(word) > word_limit]
+    name_without_punctuation = ' '.join(filtered_list).strip()
+
+    # Lower case
+    formatted_name = name_without_punctuation.lower()
+
+    # Manual fixes of typos
+    formatted_name = manually_fix_typos(formatted_name)
+
+    # Final strip
+    formatted_name = formatted_name.strip()
+
+    return formatted_name
+
+
+def manually_fix_typos(game_name):
     # Objective: fix common typos
 
     game_name = game_name.replace('ii', '2')
@@ -60,7 +69,9 @@ def fix_typos(game_name):
     return game_name
 
 
-def list_all_game_names(votes):
+def list_all_game_names_for_check(votes):
+    # To manually check game names for typos or duplicates. If a problem is detected, then you have to edit manually_fix_typos()
+
     game_names = set()
 
     for vote_per_voter in votes.values():
@@ -85,6 +96,7 @@ def remove_invalid_voters(votes):
                 break
 
     for voter in invalid_voters:
+        print('Voter ' + voter + ' has casted an invalid ballot.')
         votes.pop(voter)
 
     return votes
@@ -98,8 +110,8 @@ def main():
 
     votes = parse_votes(data)
 
-    # To check game names for typos or duplicates. If a problem is detected, then you have to edit fix_typos()
-    game_names = list_all_game_names(votes)
+    # Manual check for typos
+    game_names = list_all_game_names_for_check(votes)
 
     votes = remove_invalid_voters(votes)
 
