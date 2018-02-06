@@ -1,0 +1,4 @@
+Faker
+matplotlib
+numpy
+python-Levenshtein
