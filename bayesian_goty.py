@@ -112,7 +112,7 @@ def print_ranking(ranking, observations, prior):
 
 
 def main():
-    filename = 'steam_resetera_2017_goty.txt'
+    filename = 'data/steam_resetera_2017_goty.txt'
 
     data = load_input(filename)
 
