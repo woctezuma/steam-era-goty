@@ -230,7 +230,7 @@ def print_schulze_ranking(schulze_ranking, steamspy_database):
 
 
 def main():
-    filename = 'votes_with_ids/steam_resetera_2017_goty_votes.csv'
+    filename = 'data/votes_with_ids/steam_resetera_2017_goty_votes.csv'
     file_encoding = 'ansi'
 
     data = load_input(filename, file_encoding)
