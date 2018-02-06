@@ -130,7 +130,7 @@ def display_matches(matches):
 
 
 def get_hard_coded_appID_dict():
-    # Hard-coded list of game names which are wrongly matched with Levenshtein distance (cf. wrong_matches.txt)
+    # Hard-coded list of game names which are wrongly matched with Levenshtein distance (cf. output/wrong_matches.txt)
 
     hard_coded_dict = {
         "Death of the Outsider": "614570",
