@@ -223,11 +223,33 @@ def print_schulze_ranking(schulze_ranking, steamspy_database):
             game_name = steamspy_database[appID]['name']
             print('{0:2} | '.format(rank + 1)
                   + game_name.strip()
-                  # + ' (appID: ' + appID + ')'
+                  + ' (appID: ' + appID + ')'
                   )
 
     return
 
+def print_ballot_distribution_for_given_appid(appID_group, normalized_votes):
+
+    for appID in appID_group:
+
+        ballot_distribution = None
+
+        for voter_name in normalized_votes.keys():
+            current_ballots = normalized_votes[voter_name]['ballots']
+
+            if ballot_distribution is None:
+                ballot_distribution = [0 for position in range(len(current_ballots))]
+
+            positions = sorted(current_ballots.keys())
+
+            for index in range(len(ballot_distribution)):
+                if current_ballots[positions[index]] == appID:
+                    ballot_distribution[index] += 1
+
+        print('\nappID:' + appID, end='\t')
+        print('counts of ballots with rank 1, 2, ..., 5:\t', ballot_distribution)
+
+    return
 
 def main():
     filename = 'data/anonymized_votes/steam_resetera_2017_goty_votes.csv'
@@ -247,6 +269,10 @@ def main():
     normalized_votes = normalize_votes(raw_votes, matches)
 
     schulze_ranking = compute_schulze_ranking(normalized_votes, steamspy_database)
+
+    num_appID_groups_to_display = 3
+    for appID_group in schulze_ranking[0:num_appID_groups_to_display]:
+        print_ballot_distribution_for_given_appid(appID_group, normalized_votes)
 
     return
 
