@@ -1,0 +1,4 @@
+.idea/
+venv/
+__pycache__/
+data/2018*_steamspy.json
