@@ -1,134 +1,134 @@
- 1 | NieR:Automata
- 2 | Hollow Knight
- 3 | Divinity: Original Sin 2
- 4 | Prey
- 5 | PLAYERUNKNOWN'S BATTLEGROUNDS
- 6 | Cuphead
- 7 | RESIDENT EVIL 7 biohazard / BIOHAZARD 7 resident evil
- 8 | What Remains of Edith Finch
- 8 | Life is Strange: Before the Storm
- 9 | The Legend of Heroes: Trails in the Sky the 3rd
-10 | Wolfenstein II: The New Colossus
-11 | Hellblade: Senua's Sacrifice
-12 | The Evil Within 2
-12 | Sonic Mania
-12 | Doki Doki Literature Club!
-12 | Assassin's Creed Origins
-13 | Bayonetta
-14 | The Legend of Heroes: Trails of Cold Steel
-14 | Nioh: Complete Edition /  Complete Edition
-15 | Dishonored: Death of the Outsider
-16 | Pyre
-17 | Total War: WARHAMMER II
-18 | Night in the Woods
-19 | Danganronpa V3: Killing Harmony
-20 | A Hat in Time
-21 | Torment: Tides of Numenera
-21 | Cosmic Star Heroine
-21 | TEKKEN 7
-22 | The Sexy Brutale
-22 | Nex Machina
-23 | ELEX
-23 | Zwei: The Ilvard Insurrection
-24 | SteamWorld Dig 2
-25 | Atelier Sophie: The Alchemist of the Mysterious Book
-25 | OKAMI HD /
-25 | Slime Rancher
-26 | Thimbleweed Park
-26 | Tokyo Xanadu eX+
-26 | Tales of Berseria
-26 | Ys SEVEN
-27 | Opus Magnum
-28 | Gorogoa
-29 | Umineko When They Cry - Answer Arcs
-29 | Killer Instinct
-29 | Sniper Elite 4
-30 | Marvel vs. Capcom: Infinite
-30 | Rez Infinite
-30 | Vanquish
-30 | Battle Brothers
-30 | South Park: The Fractured But Whole
-31 | Unexplored
-31 | Zero Escape: The Nonary Games
-32 | Snake Pass
-33 | Heat Signature
-33 | Fidel Dungeon Rescue
-33 | Yooka-Laylee
-34 | Rain World
-34 | Agents of Mayhem
-34 | Everything
-34 | Battle Chasers: Nightwar
-34 | LEGO City Undercover
-34 | Middle-earth: Shadow of War
-34 | Wonder Boy: The Dragon's Trap
-34 | The Surge
-34 | EVERSPACE
-34 | Detention
-34 | Hidden Star in Four Seasons.
-34 | Raw Data
-34 | Full Throttle Remastered
-34 | RiME
-34 | Getting Over It with Bennett Foddy
-35 | Stories Untold
-36 | Endless Space 2
-37 | Figment
-38 | Black The Fall
-39 | Marvel's Guardians of the Galaxy: The Telltale Series
-39 | Dungeons 3
-39 | VRChat
-39 | Faeria
-39 | BlazBlue Centralfiction
-39 | The Long Dark
-39 | Sid Meiers Civilization VI
-39 | Pictopix
-39 | Fairy Fencer F Advent Dark Force |   ADVENT DARK FORCE |  F ADVENT DARK FORCE
-39 | The Darkside Detective
-39 | The End Is Nigh
-40 | Paradigm
-40 | Stardew Valley
-40 | Cluckles' Adventure
-40 | Superflight
-40 | BLUE REFLECTION / BLUE REFLECTION
-40 | Superdimension Neptune VS Sega Hard Girls | VS  | VS SEGA
-40 | PUSH
-40 | Tacoma
-40 | Meltys Quest
-40 | THE KING OF FIGHTERS XIV STEAM EDITION
-40 | West of Loathing
-40 | Hidden Folks
-40 | Omegaland
-40 | ARK: Survival Evolved
-40 | Planescape: Torment: Enhanced Edition
-40 | Darkwood
-40 | Bleed 2
-40 | Finding Paradise
-40 | Fire Pro Wrestling World
-40 | Tom Clancy's Ghost Recon Wildlands
-40 | Hand of Fate 2
-40 | Death Coming
-40 | Rakuen
-40 | Space Pirate Trainer
-40 | PRO EVOLUTION SOCCER 2018
-40 | SpellForce 3
-40 | Nights of Azure
-40 | Organ Quarter
-40 | TO THE TOP
-40 | Turok 2: Seeds of Evil
-40 | Power Hover
-40 | Quake Champions
-40 | Soda Dungeon
-40 | Steel Division: Normandy 44
-40 | Pinball FX3
-40 | NARUTO SHIPPUDEN: Ultimate Ninja STORM 2
-40 | Vaporum
-40 | Red Haze
-40 | AER Memories of Old
-40 | The Infectious Madness of Doctor Dekker
-40 | Fallout 4 VR
-40 | Injustice 2
-40 | Friday the 13th: The Game
-40 | SPACEPLAN
-40 | Nights of Azure 2: Bride of the New Moon /
-40 | Rising Storm 2: Vietnam
-40 | Muv-Luv Alternative
-40 | Battlerite
+ 1 | NieR:Automata (appID: 524220, released on 17 Mar, 2017)
+ 2 | Hollow Knight (appID: 367520, released on 24 Feb, 2017)
+ 3 | Divinity: Original Sin 2 (appID: 435150, released on 14 Sep, 2017)
+ 4 | Prey (appID: 480490, released on 4 May, 2017)
+ 5 | PLAYERUNKNOWN'S BATTLEGROUNDS (appID: 578080, released on 21 Dec, 2017)
+ 6 | Cuphead (appID: 268910, released on 29 Sep, 2017)
+ 7 | RESIDENT EVIL 7 biohazard / BIOHAZARD 7 resident evil (appID: 418370, released on 23 Jan, 2017)
+ 8 | Life is Strange: Before the Storm (appID: 554620, released on 31 Aug, 2017)
+ 8 | What Remains of Edith Finch (appID: 501300, released on 24 Apr, 2017)
+ 9 | The Legend of Heroes: Trails in the Sky the 3rd (appID: 436670, released on 3 May, 2017)
+10 | Wolfenstein II: The New Colossus (appID: 612880, released on 26 Oct, 2017)
+11 | Hellblade: Senua's Sacrifice (appID: 414340, released on 7 Aug, 2017)
+12 | Sonic Mania (appID: 584400, released on 29 Aug, 2017)
+12 | The Evil Within 2 (appID: 601430, released on 12 Oct, 2017)
+12 | Doki Doki Literature Club! (appID: 698780, released on 6 Oct, 2017)
+12 | Assassin's Creed Origins (appID: 582160, released on 26 Oct, 2017)
+13 | Bayonetta (appID: 460790, released on 11 Apr, 2017)
+14 | Nioh: Complete Edition /  Complete Edition (appID: 485510, released on 7 Nov, 2017)
+14 | The Legend of Heroes: Trails of Cold Steel (appID: 538680, released on 2 Aug, 2017)
+15 | Dishonored: Death of the Outsider (appID: 614570, released on 14 Sep, 2017)
+16 | Pyre (appID: 462770, released on 25 Jul, 2017)
+17 | Total War: WARHAMMER II (appID: 594570, released on 28 Sep, 2017)
+18 | Night in the Woods (appID: 481510, released on 21 Feb, 2017)
+19 | Danganronpa V3: Killing Harmony (appID: 567640, released on 25 Sep, 2017)
+20 | A Hat in Time (appID: 253230, released on 5 Oct, 2017)
+21 | TEKKEN 7 (appID: 389730, released on 1 Jun, 2017)
+21 | Cosmic Star Heroine (appID: 256460, released on 11 Apr, 2017)
+21 | Torment: Tides of Numenera (appID: 272270, released on 27 Feb, 2017)
+22 | Nex Machina (appID: 404540, released on 20 Jun, 2017)
+22 | The Sexy Brutale (appID: 552590, released on 11 Apr, 2017)
+23 | ELEX (appID: 411300, released on 17 Oct, 2017)
+23 | Zwei: The Ilvard Insurrection (appID: 427700, released on 31 Oct, 2017)
+24 | SteamWorld Dig 2 (appID: 571310, released on 22 Sep, 2017)
+25 | Slime Rancher (appID: 433340, released on 1 Aug, 2017)
+25 | Atelier Sophie: The Alchemist of the Mysterious Book (appID: 527270, released on 7 Feb, 2017)
+25 | OKAMI HD / (appID: 587620, released on 12 Dec, 2017)
+26 | Tales of Berseria (appID: 429660, released on 26 Jan, 2017)
+26 | Tokyo Xanadu eX+ (appID: 587260, released on 8 Dec, 2017)
+26 | Ys SEVEN (appID: 587100, released on 30 Aug, 2017)
+26 | Thimbleweed Park (appID: 569860, released on 30 Mar, 2017)
+27 | Opus Magnum (appID: 558990, released on 7 Dec, 2017)
+28 | Gorogoa (appID: 557600, released on 14 Dec, 2017)
+29 | Killer Instinct (appID: 577940, released on 27 Sep, 2017)
+29 | Sniper Elite 4 (appID: 312660, released on 13 Feb, 2017)
+29 | Umineko When They Cry - Answer Arcs (appID: 639490, released on 17 Nov, 2017)
+30 | South Park: The Fractured But Whole (appID: 488790, released on 16 Oct, 2017)
+30 | Marvel vs. Capcom: Infinite (appID: 493840, released on 19 Sep, 2017)
+30 | Battle Brothers (appID: 365360, released on 24 Mar, 2017)
+30 | Vanquish (appID: 460810, released on 25 May, 2017)
+30 | Rez Infinite (appID: 636450, released on 9 Aug, 2017)
+31 | Unexplored (appID: 506870, released on 22 Feb, 2017)
+31 | Zero Escape: The Nonary Games (appID: 477740, released on 24 Mar, 2017)
+32 | Snake Pass (appID: 544330, released on 28 Mar, 2017)
+33 | Heat Signature (appID: 268130, released on 21 Sep, 2017)
+33 | Fidel Dungeon Rescue (appID: 573170, released on 1 Aug, 2017)
+33 | Yooka-Laylee (appID: 360830, released on 11 Apr, 2017)
+34 | Full Throttle Remastered (appID: 228360, released on 18 Apr, 2017)
+34 | Hidden Star in Four Seasons. (appID: 745880, released on 17 Nov, 2017)
+34 | Everything (appID: 582270, released on 21 Apr, 2017)
+34 | Getting Over It with Bennett Foddy (appID: 240720, released on 6 Dec, 2017)
+34 | Rain World (appID: 312520, released on 28 Mar, 2017)
+34 | EVERSPACE (appID: 396750, released on 25 May, 2017)
+34 | RiME (appID: 493200, released on 26 May, 2017)
+34 | The Surge (appID: 378540, released on 15 May, 2017)
+34 | Middle-earth: Shadow of War (appID: 356190, released on 9 Oct, 2017)
+34 | LEGO City Undercover (appID: 578330, released on 4 Apr, 2017)
+34 | Battle Chasers: Nightwar (appID: 451020, released on 3 Oct, 2017)
+34 | Agents of Mayhem (appID: 304530, released on 15 Aug, 2017)
+34 | Detention (appID: 555220, released on 12 Jan, 2017)
+34 | Wonder Boy: The Dragon's Trap (appID: 543260, released on 8 Jun, 2017)
+34 | Raw Data (appID: 436320, released on 5 Oct, 2017)
+35 | Stories Untold (appID: 558420, released on 27 Feb, 2017)
+36 | Endless Space 2 (appID: 392110, released on 18 May, 2017)
+37 | Figment (appID: 493540, released on 22 Sep, 2017)
+38 | Black The Fall (appID: 308060, released on 11 Jul, 2017)
+39 | The Darkside Detective (appID: 368390, released on 27 Jul, 2017)
+39 | VRChat (appID: 438100, released on 1 Feb, 2017)
+39 | Pictopix (appID: 568320, released on 5 Jan, 2017)
+39 | Dungeons 3 (appID: 493900, released on 13 Oct, 2017)
+39 | Sid Meiers Civilization VI (appID: 289070, released on 20 Oct, 2016)
+39 | BlazBlue Centralfiction (appID: 586140, released on 25 Apr, 2017)
+39 | Marvel's Guardians of the Galaxy: The Telltale Series (appID: 579950, released on 18 Apr, 2017)
+39 | Fairy Fencer F Advent Dark Force |   ADVENT DARK FORCE |  F ADVENT DARK FORCE (appID: 524580, released on 14 Feb, 2017)
+39 | The Long Dark (appID: 305620, released on 1 Aug, 2017)
+39 | Faeria (appID: 397060, released on 8 Mar, 2017)
+39 | The End Is Nigh (appID: 583470, released on 12 Jul, 2017)
+40 | Bleed 2 (appID: 396350, released on 8 Feb, 2017)
+40 | Soda Dungeon (appID: 564710, released on 6 Feb, 2017)
+40 | Red Haze (appID: 428860, released on 13 Feb, 2017)
+40 | Pinball FX3 (appID: 442120, released on 26 Sep, 2017)
+40 | NARUTO SHIPPUDEN: Ultimate Ninja STORM 2 (appID: 543870, released on 25 Aug, 2017)
+40 | Superdimension Neptune VS Sega Hard Girls | VS  | VS SEGA (appID: 571530, released on 12 Jun, 2017)
+40 | PRO EVOLUTION SOCCER 2018 (appID: 592580, released on 13 Sep, 2017)
+40 | Steel Division: Normandy 44 (appID: 572410, released on 23 May, 2017)
+40 | PUSH (appID: 676430, released on 18 Oct, 2017)
+40 | Turok 2: Seeds of Evil (appID: 405830, released on 16 Mar, 2017)
+40 | Nights of Azure (appID: 527280, released on 7 Feb, 2017)
+40 | Paradigm (appID: 600370, released on 5 Apr, 2017)
+40 | Rising Storm 2: Vietnam (appID: 418460, released on 30 May, 2017)
+40 | Space Pirate Trainer (appID: 418650, released on 12 Oct, 2017)
+40 | Quake Champions (appID: 611500, released on 22 Aug, 2017)
+40 | Hand of Fate 2 (appID: 456670, released on 7 Nov, 2017)
+40 | Tacoma (appID: 343860, released on 1 Aug, 2017)
+40 | Muv-Luv Alternative (appID: 449840, released on an unknown date)
+40 | Tom Clancy's Ghost Recon Wildlands (appID: 460930, released on 6 Mar, 2017)
+40 | Vaporum (appID: 629690, released on 28 Sep, 2017)
+40 | Cluckles' Adventure (appID: 605250, released on 10 Apr, 2017)
+40 | Meltys Quest (appID: 723090, released on 24 Oct, 2017)
+40 | Darkwood (appID: 274520, released on 17 Aug, 2017)
+40 | Rakuen (appID: 559210, released on 10 May, 2017)
+40 | Battlerite (appID: 504370, released on 8 Nov, 2017)
+40 | Planescape: Torment: Enhanced Edition (appID: 466300, released on 11 Apr, 2017)
+40 | West of Loathing (appID: 597220, released on 10 Aug, 2017)
+40 | SPACEPLAN (appID: 616110, released on 3 May, 2017)
+40 | Finding Paradise (appID: 337340, released on 14 Dec, 2017)
+40 | Power Hover (appID: 559960, released on 10 Jan, 2017)
+40 | Organ Quarter (appID: 605830, released on 19 Oct, 2017)
+40 | TO THE TOP (appID: 509250, released on 18 May, 2017)
+40 | ARK: Survival Evolved (appID: 346110, released on 29 Aug, 2017)
+40 | Injustice 2 (appID: 627270, released on 30 Nov, 2017)
+40 | Friday the 13th: The Game (appID: 438740, released on 25 May, 2017)
+40 | Omegaland (appID: 619870, released on 12 Jul, 2017)
+40 | SpellForce 3 (appID: 311290, released on 7 Dec, 2017)
+40 | Hidden Folks (appID: 435400, released on 15 Feb, 2017)
+40 | THE KING OF FIGHTERS XIV STEAM EDITION (appID: 571260, released on 15 Jun, 2017)
+40 | Death Coming (appID: 705120, released on 6 Nov, 2017)
+40 | Stardew Valley (appID: 413150, released on 26 Feb, 2016)
+40 | Fallout 4 VR (appID: 611660, released on 11 Dec, 2017)
+40 | Superflight (appID: 732430, released on 8 Nov, 2017)
+40 | AER Memories of Old (appID: 331870, released on 25 Oct, 2017)
+40 | Fire Pro Wrestling World (appID: 564230, released on 18 Dec, 2017)
+40 | BLUE REFLECTION / BLUE REFLECTION (appID: 658260, released on 26 Sep, 2017)
+40 | Nights of Azure 2: Bride of the New Moon / (appID: 636570, released on 24 Oct, 2017)
+40 | The Infectious Madness of Doctor Dekker (appID: 545540, released on 19 May, 2017)
