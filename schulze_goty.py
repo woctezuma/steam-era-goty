@@ -82,13 +82,7 @@ def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors
             iter_count = 0
             while is_the_first_match_released_in_a_wrong_year and (iter_count < max_num_tries_for_year):
                 first_match = filtered_sorted_appIDS[0]
-                matched_release_date = get_release_date(first_match)
-
-                try:
-                    # Reference: https://stackoverflow.com/a/6557568/
-                    matched_release_year = datetime.datetime.strptime(matched_release_date, '%d %b, %Y').year
-                except TypeError:
-                    matched_release_year = -1
+                matched_release_year = get_release_year(first_match)
 
                 is_the_first_match_released_in_a_wrong_year = bool(matched_release_year != int(release_year))
                 if is_the_first_match_released_in_a_wrong_year:
@@ -351,6 +345,52 @@ def get_release_date(appID):
     return appID_release_date
 
 
+def get_release_year(appID):
+    release_date = get_release_date(appID)
+
+    try:
+        # Reference: https://stackoverflow.com/a/6557568/
+        release_year = datetime.datetime.strptime(release_date, '%d %b, %Y').year
+    except TypeError:
+        release_year = -1
+
+    return release_year
+
+
+def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_year):
+    # Objecive: remove appID which gathered votes but were not released during the target release year
+
+    print()
+
+    release_years = dict()
+    removed_appIDs = []
+
+    for voter in normalized_votes.keys():
+        current_ballots = normalized_votes[voter]['ballots']
+
+        current_ballots_list = []
+        for position in sorted(current_ballots.keys()):
+            appID = current_ballots[position]
+            if appID is not None:
+                if appID not in release_years.keys():
+                    release_years[appID] = get_release_year(appID)
+                if release_years[appID] == int(target_release_year):
+                    current_ballots_list.append(appID)
+                else:
+                    if appID not in removed_appIDs:
+                        print('AppID ' + appID + ' was removed because it was released in ' + str(release_years[appID]))
+                        removed_appIDs.append(appID)
+
+        for i in range(len(current_ballots_list)):
+            position = i + 1
+            normalized_votes[voter]['ballots'][position] = current_ballots_list[i]
+        for i in range(len(current_ballots_list), len(current_ballots.keys())):
+            position = i + 1
+            normalized_votes[voter]['ballots'][position] = None
+
+    return normalized_votes
+
+
 def main():
     filename = 'data/anonymized_votes/steam_resetera_2017_goty_votes.csv'
     file_encoding = 'ansi'
@@ -372,6 +412,8 @@ def main():
     display_matches(matches)
 
     normalized_votes = normalize_votes(raw_votes, matches)
+
+    normalized_votes = filter_out_votes_for_wrong_release_years(normalized_votes, release_year)
 
     schulze_ranking = compute_schulze_ranking(normalized_votes, steamspy_database)
 
