@@ -1,4 +1,9 @@
+import datetime
+import json
+import pathlib
+
 import Levenshtein as lv
+import requests
 
 from bayesian_goty import load_input
 from download_json import getTodaysSteamSpyData
@@ -50,7 +55,8 @@ def normalize_votes(raw_votes, matches):
     return normalized_votes
 
 
-def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors=1):
+def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors=1,
+                       release_year=None, max_num_tries_for_year=2):
     dist = dict()
 
     lower_case_input = game_name_input.lower()
@@ -63,19 +69,50 @@ def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors
 
     sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
 
+    filtered_sorted_appIDS = sorted_appIDS.copy()
+
+    if release_year is not None:
+        first_match = filtered_sorted_appIDS[0]
+        dist_reference = dist[first_match]
+
+        if dist_reference > 0:
+            # Check release year to remove possible mismatches. For instance, with input Warhammer 2 and two choices:
+            # Warhammer & Warhammer II, we would only keep the game released in the target year (2017), which is the sequel.
+            is_the_first_match_released_in_a_wrong_year = True
+            iter_count = 0
+            while is_the_first_match_released_in_a_wrong_year and (iter_count < max_num_tries_for_year):
+                first_match = filtered_sorted_appIDS[0]
+                matched_release_date = get_release_date(first_match)
+
+                try:
+                    # Reference: https://stackoverflow.com/a/6557568/
+                    matched_release_year = datetime.datetime.strptime(matched_release_date, '%d %b, %Y').year
+                except TypeError:
+                    matched_release_year = -1
+
+                is_the_first_match_released_in_a_wrong_year = bool(matched_release_year != int(release_year))
+                if is_the_first_match_released_in_a_wrong_year:
+                    filtered_sorted_appIDS.pop(0)
+
+                iter_count += 1
+            # Reset if we could not find a match released in the target year
+            if is_the_first_match_released_in_a_wrong_year:
+                filtered_sorted_appIDS = sorted_appIDS
+
     if check_database_of_problematic_game_names(game_name_input):
         closest_appID = [find_hard_coded_appID(game_name_input)]
         if num_closest_neighbors > 1:
-            closest_appID.extend(sorted_appIDS[0:(num_closest_neighbors - 1)])
+            closest_appID.extend(filtered_sorted_appIDS[0:(num_closest_neighbors - 1)])
     else:
-        closest_appID = sorted_appIDS[0:num_closest_neighbors]
+        closest_appID = filtered_sorted_appIDS[0:num_closest_neighbors]
 
     closest_distance = [dist[appID] for appID in closest_appID]
 
     return (closest_appID, closest_distance)
 
 
-def precompute_matches(raw_votes, steamspy_database, num_closest_neighbors=1):
+def precompute_matches(raw_votes, steamspy_database, num_closest_neighbors=1,
+                       release_year=None, max_num_tries_for_year=2):
     seen_game_names = set()
     matches = dict()
 
@@ -86,7 +123,8 @@ def precompute_matches(raw_votes, steamspy_database, num_closest_neighbors=1):
 
                 if raw_name != '':
                     (closest_appID, closest_distance) = find_closest_appID(raw_name, steamspy_database,
-                                                                           num_closest_neighbors)
+                                                                           num_closest_neighbors,
+                                                                           release_year, max_num_tries_for_year)
 
                     element = dict()
                     element['input_name'] = raw_name
@@ -137,15 +175,15 @@ def get_hard_coded_appID_dict():
         "Hellblade": "414340",
         "Nioh": "485510",
         "Nioh: Complete Edition": "485510",
-        "Okami HD": "587620",
+        # "Okami HD": "587620",
         "Okami": "587620",
         "PUBG": "578080",
         "Resident Evil 7": "418370",
         "Resident Evil VII Biohazard": "418370",
         "Resident Evil VII": "418370",
         "Telltale's Guardians of the Galaxy": "579950",
-        "Total War: Warhammer 2": "594570",
-        "Total war:warhammer 2": "594570",
+        # "Total War: Warhammer 2": "594570",
+        # "Total war:warhammer 2": "594570",
         "Trails in the Sky the 3rd": "436670",
         "Turok 2": "405830",
         "Wolfenstein II": "612880",
@@ -218,18 +256,26 @@ def compute_schulze_ranking(normalized_votes, steamspy_database):
 
 
 def print_schulze_ranking(schulze_ranking, steamspy_database):
+    print()
+
     for (rank, appID_group) in enumerate(schulze_ranking):
         for appID in appID_group:
             game_name = steamspy_database[appID]['name']
+
+            appID_release_date = get_release_date(appID)
+            if appID_release_date is None:
+                appID_release_date = 'an unknown date'
+
             print('{0:2} | '.format(rank + 1)
                   + game_name.strip()
-                  + ' (appID: ' + appID + ')'
+                  + ' (appID: ' + appID
+                  + ', released on ' + appID_release_date + ')'
                   )
 
     return
 
-def print_ballot_distribution_for_given_appid(appID_group, normalized_votes):
 
+def print_ballot_distribution_for_given_appid(appID_group, normalized_votes):
     for appID in appID_group:
 
         ballot_distribution = None
@@ -251,6 +297,60 @@ def print_ballot_distribution_for_given_appid(appID_group, normalized_votes):
 
     return
 
+
+def get_appdetails_filename(appID):
+    data_path = "data/appdetails/"
+
+    pathlib.Path(data_path).mkdir(parents=True, exist_ok=True)
+
+    output_file = "appID_" + appID + ".json"
+    data_filename = data_path + output_file
+
+    return data_filename
+
+
+def download_appdetails(appID):
+    api_url = "http://store.steampowered.com/api/appdetails/"
+
+    defaults = {
+        'json': '1',
+    }
+
+    req_data = dict(defaults)
+    req_data['appids'] = appID
+
+    resp_data = requests.get(api_url, params=req_data)
+
+    result = resp_data.json()
+
+    request_success_flag = result[appID]['success']
+
+    if request_success_flag:
+        data_filename = get_appdetails_filename(appID)
+
+        with open(data_filename, "w") as out_file:
+            out_file.write(json.dumps(result))
+
+    return result
+
+
+def get_release_date(appID):
+    try:
+        data_filename = get_appdetails_filename(appID)
+
+        with open(data_filename, 'r', encoding="utf8") as in_json_file:
+            result = json.load(in_json_file)
+    except FileNotFoundError:
+        result = download_appdetails(appID)
+
+    try:
+        appID_release_date = result[appID]['data']['release_date']['date']
+    except KeyError:
+        appID_release_date = None
+
+    return appID_release_date
+
+
 def main():
     filename = 'data/anonymized_votes/steam_resetera_2017_goty_votes.csv'
     file_encoding = 'ansi'
@@ -262,9 +362,14 @@ def main():
     steamspy_database = getTodaysSteamSpyData()
     num_closest_neighbors = 3
 
-    matches = precompute_matches(raw_votes, steamspy_database, num_closest_neighbors)
+    release_year = '2017'
+    # The following parameter can only have an effect if it is strictly greater than 1.
+    max_num_tries_for_year = 2
 
-    # display_matches(matches)
+    matches = precompute_matches(raw_votes, steamspy_database, num_closest_neighbors,
+                                 release_year, max_num_tries_for_year)
+
+    display_matches(matches)
 
     normalized_votes = normalize_votes(raw_votes, matches)
 
