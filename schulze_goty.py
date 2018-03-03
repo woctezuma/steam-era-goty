@@ -55,8 +55,8 @@ def normalize_votes(raw_votes, matches):
     return normalized_votes
 
 
-def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors=1,
-                       release_year=None, max_num_tries_for_year=2):
+def compute_all_name_distances(game_name_input, steamspy_database):
+
     dist = dict()
 
     lower_case_input = game_name_input.lower()
@@ -68,6 +68,11 @@ def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors
         dist[appID] = lv.distance(lower_case_input, str.lower())
 
     sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
+
+    return (dist, sorted_appIDS)
+
+
+def constrain_appID_search_by_year(dist, sorted_appIDS, release_year, max_num_tries_for_year):
 
     filtered_sorted_appIDS = sorted_appIDS.copy()
 
@@ -93,12 +98,32 @@ def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors
             if is_the_first_match_released_in_a_wrong_year:
                 filtered_sorted_appIDS = sorted_appIDS
 
+    return filtered_sorted_appIDS
+
+
+def apply_hard_coded_fixes_to_appID_search(game_name_input, filtered_sorted_appIDS, num_closest_neighbors):
+    closest_appID = [find_hard_coded_appID(game_name_input)]
+    if num_closest_neighbors > 1:
+        closest_appID.extend(filtered_sorted_appIDS[0:(num_closest_neighbors - 1)])
+
+    return closest_appID
+
+
+def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors=1,
+                       release_year=None, max_num_tries_for_year=2):
+    (dist, sorted_appIDS) = compute_all_name_distances(game_name_input, steamspy_database)
+
+    filtered_sorted_appIDS = sorted_appIDS
+
+    if release_year is not None:
+        filtered_sorted_appIDS = constrain_appID_search_by_year(dist, sorted_appIDS, release_year,
+                                                                max_num_tries_for_year)
+
+    closest_appID = filtered_sorted_appIDS[0:num_closest_neighbors]
+
     if check_database_of_problematic_game_names(game_name_input):
-        closest_appID = [find_hard_coded_appID(game_name_input)]
-        if num_closest_neighbors > 1:
-            closest_appID.extend(filtered_sorted_appIDS[0:(num_closest_neighbors - 1)])
-    else:
-        closest_appID = filtered_sorted_appIDS[0:num_closest_neighbors]
+        closest_appID = apply_hard_coded_fixes_to_appID_search(game_name_input, filtered_sorted_appIDS,
+                                                               num_closest_neighbors)
 
     closest_distance = [dist[appID] for appID in closest_appID]
 
