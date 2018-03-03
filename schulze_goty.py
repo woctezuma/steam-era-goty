@@ -1,12 +1,6 @@
-import datetime
-import json
-import pathlib
-
-import Levenshtein as lv
-import requests
-
 from bayesian_goty import load_input
 from download_json import getTodaysSteamSpyData
+from steamspy_utils import compute_all_name_distances, get_release_date_as_str, get_release_year
 
 
 def parse_votes(data, num_games_per_voter=5):
@@ -55,25 +49,7 @@ def normalize_votes(raw_votes, matches):
     return normalized_votes
 
 
-def compute_all_name_distances(game_name_input, steamspy_database):
-
-    dist = dict()
-
-    lower_case_input = game_name_input.lower()
-
-    for appID in steamspy_database.keys():
-        str = steamspy_database[appID]['name']
-
-        # Compare names in lower cases, to avoid mismatches for Tekken vs. TEKKEN, or Warhammer vs. WARHAMMER
-        dist[appID] = lv.distance(lower_case_input, str.lower())
-
-    sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
-
-    return (dist, sorted_appIDS)
-
-
 def constrain_appID_search_by_year(dist, sorted_appIDS, release_year, max_num_tries_for_year):
-
     filtered_sorted_appIDS = sorted_appIDS.copy()
 
     if release_year is not None:
@@ -281,7 +257,7 @@ def print_schulze_ranking(schulze_ranking, steamspy_database):
         for appID in appID_group:
             game_name = steamspy_database[appID]['name']
 
-            appID_release_date = get_release_date(appID)
+            appID_release_date = get_release_date_as_str(appID)
             if appID_release_date is None:
                 appID_release_date = 'an unknown date'
 
@@ -315,71 +291,6 @@ def print_ballot_distribution_for_given_appid(appID_group, normalized_votes):
         print('counts of ballots with rank 1, 2, ..., 5:\t', ballot_distribution)
 
     return
-
-
-def get_appdetails_filename(appID):
-    data_path = "data/appdetails/"
-
-    pathlib.Path(data_path).mkdir(parents=True, exist_ok=True)
-
-    output_file = "appID_" + appID + ".json"
-    data_filename = data_path + output_file
-
-    return data_filename
-
-
-def download_appdetails(appID):
-    api_url = "http://store.steampowered.com/api/appdetails/"
-
-    defaults = {
-        'json': '1',
-    }
-
-    req_data = dict(defaults)
-    req_data['appids'] = appID
-
-    resp_data = requests.get(api_url, params=req_data)
-
-    result = resp_data.json()
-
-    request_success_flag = result[appID]['success']
-
-    if request_success_flag:
-        data_filename = get_appdetails_filename(appID)
-
-        with open(data_filename, "w") as out_file:
-            out_file.write(json.dumps(result))
-
-    return result
-
-
-def get_release_date(appID):
-    try:
-        data_filename = get_appdetails_filename(appID)
-
-        with open(data_filename, 'r', encoding="utf8") as in_json_file:
-            result = json.load(in_json_file)
-    except FileNotFoundError:
-        result = download_appdetails(appID)
-
-    try:
-        appID_release_date = result[appID]['data']['release_date']['date']
-    except KeyError:
-        appID_release_date = None
-
-    return appID_release_date
-
-
-def get_release_year(appID):
-    release_date = get_release_date(appID)
-
-    try:
-        # Reference: https://stackoverflow.com/a/6557568/
-        release_year = datetime.datetime.strptime(release_date, '%d %b, %Y').year
-    except TypeError:
-        release_year = -1
-
-    return release_year
 
 
 def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_year):
