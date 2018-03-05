@@ -20,7 +20,7 @@ The original data consists in sets of GOTY candidates, which happen to be ranked
 
 ### Result
 
-Full result is [here](https://raw.githubusercontent.com/woctezuma/steam-era-goty/master/output/bayesian_ranking.txt).
+Full result is [here](output/bayesian_ranking.txt).
 
 ## Schulze Method
 
@@ -35,7 +35,7 @@ It cannot be shared for privacy concerns.
 
 ### Result
 
-Full result is [here](https://raw.githubusercontent.com/woctezuma/steam-era-goty/master/output/schulze_ranking.txt).
+Full result is [here](output/schulze_ranking.txt).
 
 ## References
 
