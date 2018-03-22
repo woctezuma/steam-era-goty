@@ -1,7 +1,6 @@
 import re
 
-import matplotlib.pyplot as plt
-import numpy as np
+from compute_bayesian_rating import choose_prior, compute_bayesian_score
 
 
 def load_input(filename, file_encoding='utf8'):
@@ -44,43 +43,6 @@ def parse_data(data):
         observations[game_name]['num_votes'] = num_votes
 
     return observations
-
-
-def choose_prior(observations, verbose=False):
-    prior = dict()
-
-    scores = [game['score'] for game in observations.values()]
-    votes = [game['num_votes'] for game in observations.values()]
-
-    # Data visualization to help choose a good prior
-    if verbose:
-        score_max = np.max(scores)
-        vote_max = np.max(votes)
-
-        print('Highest average score:')
-        print([game_name for game_name in observations.keys() if observations[game_name]['score'] >= score_max])
-
-        print('Highest number of votes:')
-        print([game_name for game_name in observations.keys() if observations[game_name]['num_votes'] >= vote_max])
-
-        plt.figure()
-        plt.scatter(scores, votes)
-        plt.xlabel('Average Score')
-        plt.ylabel('Number of votes')
-        plt.show()
-
-    # TODO: Important choices below. How do you choose a good prior? Median? Average?
-    prior['score'] = np.median(scores)
-    prior['num_votes'] = np.average(votes)
-
-    return prior
-
-
-def compute_bayesian_score(game, prior):
-    bayesian_score = (prior['num_votes'] * prior['score'] + game['num_votes'] * game['score']) \
-                     / (prior['num_votes'] + game['num_votes'])
-
-    return bayesian_score
 
 
 def compute_ranking(observations, prior):
