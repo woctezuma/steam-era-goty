@@ -329,8 +329,7 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
 
 def main():
     filename = 'data/anonymized_votes/steam_resetera_2017_goty_votes.csv'
-    file_encoding = 'mbcs'  # Identical to 'ansi'.
-    # Reference: https://docs.python.org/2/library/codecs.html#python-specific-encodings
+    file_encoding = 'cp1252'  # Reference: https://stackoverflow.com/q/12468179
 
     data = load_input(filename, file_encoding)
 
