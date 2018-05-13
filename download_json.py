@@ -119,5 +119,11 @@ def getAppidByKeywordListToExclude(keywordList):
     return appIDs
 
 
-if __name__ == "__main__":
+def main():
     getTodaysSteamSpyData()
+
+    return True
+
+
+if __name__ == "__main__":
+    main()

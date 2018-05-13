@@ -87,6 +87,8 @@ def main():
 
     print_ranking(ranking, observations, prior)
 
+    return True
+
 
 if __name__ == '__main__':
     main()

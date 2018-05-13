@@ -357,7 +357,7 @@ def main():
     for appID_group in schulze_ranking[0:num_appID_groups_to_display]:
         print_ballot_distribution_for_given_appid(appID_group, normalized_votes)
 
-    return
+    return True
 
 
 if __name__ == '__main__':
