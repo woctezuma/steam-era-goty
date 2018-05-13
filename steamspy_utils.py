@@ -81,6 +81,8 @@ def get_release_date_as_datetime(appID):
     try:
         # Reference: https://stackoverflow.com/a/6557568/
         appID_release_date_as_datetime = datetime.datetime.strptime(release_date, '%d %b, %Y')
+    except ValueError:
+        appID_release_date_as_datetime = datetime.datetime.strptime(release_date, '%b %d, %Y')
     except TypeError:
         appID_release_date_as_datetime = None
 
