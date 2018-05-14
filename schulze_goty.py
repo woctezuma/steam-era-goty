@@ -103,7 +103,7 @@ def find_closest_appID(game_name_input, steamspy_database, num_closest_neighbors
 
     closest_distance = [dist[appID] for appID in closest_appID]
 
-    return (closest_appID, closest_distance)
+    return closest_appID, closest_distance
 
 
 def precompute_matches(raw_votes, steamspy_database, num_closest_neighbors=1,
@@ -233,7 +233,7 @@ def adapt_votes_format_for_schulze_computations(normalized_votes):
 
     candidate_names = list(candidate_names)
 
-    return (candidate_names, weighted_ranks)
+    return candidate_names, weighted_ranks
 
 
 def compute_schulze_ranking(normalized_votes, steamspy_database):

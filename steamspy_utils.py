@@ -1,8 +1,8 @@
-import datetime
 import json
 import pathlib
 
 import Levenshtein as lv
+import datetime
 import requests
 
 
@@ -19,7 +19,7 @@ def compute_all_name_distances(game_name_input, steamspy_database):
 
     sorted_appIDS = sorted(dist.keys(), key=lambda x: dist[x])
 
-    return (dist, sorted_appIDS)
+    return dist, sorted_appIDS
 
 
 def get_appdetails_filename(appID):
