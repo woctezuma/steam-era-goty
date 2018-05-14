@@ -279,7 +279,7 @@ def print_ballot_distribution_for_given_appid(appID_group, normalized_votes):
             current_ballots = normalized_votes[voter_name]['ballots']
 
             if ballot_distribution is None:
-                ballot_distribution = [0 for position in range(len(current_ballots))]
+                ballot_distribution = [0 for _ in range(len(current_ballots))]
 
             positions = sorted(current_ballots.keys())
 
