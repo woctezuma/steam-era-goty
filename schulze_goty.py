@@ -327,18 +327,21 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
     return normalized_votes
 
 
-def main():
-    filename = 'data/anonymized_votes/steam_resetera_2017_goty_votes.csv'
+def compute_steam_era_goty(ballot_year, ballot_filename=None):
+    release_year = str(ballot_year)
+
+    if ballot_filename is None:
+        ballot_filename = 'data/anonymized_votes/steam_resetera_' + release_year + '_goty_votes.csv'
+
     file_encoding = 'cp1252'  # Reference: https://stackoverflow.com/q/12468179
 
-    data = load_input(filename, file_encoding)
+    data = load_input(ballot_filename, file_encoding)
 
     raw_votes = parse_votes(data)
 
     steamspy_database = getTodaysSteamSpyData()
     num_closest_neighbors = 3
 
-    release_year = '2017'
     # The following parameter can only have an effect if it is strictly greater than 1.
     max_num_tries_for_year = 2
 
@@ -356,6 +359,12 @@ def main():
     num_appID_groups_to_display = 3
     for appID_group in schulze_ranking[0:num_appID_groups_to_display]:
         print_ballot_distribution_for_given_appid(appID_group, normalized_votes)
+
+
+def main():
+    ballot_year = '2017'
+
+    compute_steam_era_goty(ballot_year)
 
     return True
 
