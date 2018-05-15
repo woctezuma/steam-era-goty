@@ -1,5 +1,6 @@
+import steamspypi.api
+
 from bayesian_goty import load_input
-from download_json import get_todays_steam_spy_data
 from steamspy_utils import compute_all_name_distances, get_release_date_as_str, get_release_year
 
 
@@ -344,7 +345,7 @@ def compute_steam_era_goty(ballot_year, ballot_filename=None):
 
     raw_votes = parse_votes(data)
 
-    steamspy_database = get_todays_steam_spy_data()
+    steamspy_database = steamspypi.api.load()
     num_closest_neighbors = 3
 
     # The following parameter can only have an effect if it is strictly greater than 1.

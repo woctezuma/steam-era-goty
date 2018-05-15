@@ -2,14 +2,7 @@ import unittest
 
 import bayesian_goty
 import compute_bayesian_rating
-import download_json
 import schulze_goty
-
-
-class TestDownloadJsonMethods(unittest.TestCase):
-
-    def test_main(self):
-        self.assertTrue(download_json.main())
 
 
 class TestComputeBayesianRatingMethods(unittest.TestCase):
