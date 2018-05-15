@@ -254,8 +254,12 @@ def print_schulze_ranking(schulze_ranking, steamspy_database):
     print()
 
     for (rank, appID_group) in enumerate(schulze_ranking):
-        for appID in appID_group:
-            game_name = steamspy_database[appID]['name']
+
+        def get_game_name(app_id):
+            return steamspy_database[app_id]['name']
+
+        for appID in sorted(appID_group, key=get_game_name):
+            game_name = get_game_name(appID)
 
             app_id_release_date = get_release_date_as_str(appID)
             if app_id_release_date is None:
