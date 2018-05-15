@@ -3,4 +3,4 @@ matplotlib==2.2.2
 numpy==1.14.3
 python-Levenshtein==0.12.0
 requests==2.18.4
-schulze
+schulze==0.1
