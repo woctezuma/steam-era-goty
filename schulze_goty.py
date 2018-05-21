@@ -300,7 +300,7 @@ def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes):
 
 
 def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_year):
-    # Objecive: remove appID which gathered votes but were not released during the target release year
+    # Objective: remove appID which gathered votes but were not released during the target release year
 
     print()
 
