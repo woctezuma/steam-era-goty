@@ -38,7 +38,7 @@ def write_output(anonymized_data, output_filename, file_encoding):
 def main():
     input_filename = 'data/votes_with_ids/steam_resetera_2017_goty_votes.csv'
     output_filename = 'data/anonymized_votes/steam_resetera_2017_goty_votes.csv'
-    file_encoding = 'ansi'
+    file_encoding = 'cp1252'
 
     data = load_input(input_filename, file_encoding)
 
