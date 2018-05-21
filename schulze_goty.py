@@ -1,7 +1,8 @@
+import steampi.calendar
+import steampi.text_distances
 import steamspypi.api
 
 from bayesian_goty import load_input
-from steamspy_utils import compute_all_name_distances, get_release_date_as_str, get_release_year
 
 
 def parse_votes(data, num_games_per_voter=5):
@@ -64,7 +65,7 @@ def constrain_app_id_search_by_year(dist, sorted_app_ids, release_year, max_num_
             iter_count = 0
             while is_the_first_match_released_in_a_wrong_year and (iter_count < max_num_tries_for_year):
                 first_match = filtered_sorted_app_ids[0]
-                matched_release_year = get_release_year(first_match)
+                matched_release_year = steampi.calendar.get_release_year(first_match)
 
                 is_the_first_match_released_in_a_wrong_year = bool(matched_release_year != int(release_year))
                 if is_the_first_match_released_in_a_wrong_year:
@@ -88,7 +89,7 @@ def apply_hard_coded_fixes_to_app_id_search(game_name_input, filtered_sorted_app
 
 def find_closest_app_id(game_name_input, steamspy_database, num_closest_neighbors=1,
                         release_year=None, max_num_tries_for_year=2):
-    (dist, sorted_app_ids) = compute_all_name_distances(game_name_input, steamspy_database)
+    (sorted_app_ids, dist) = steampi.text_distances.find_most_similar_game_names(game_name_input, steamspy_database)
 
     filtered_sorted_app_ids = sorted_app_ids
 
@@ -262,7 +263,7 @@ def print_schulze_ranking(schulze_ranking, steamspy_database):
         for appID in sorted(appID_group, key=get_game_name):
             game_name = get_game_name(appID)
 
-            app_id_release_date = get_release_date_as_str(appID)
+            app_id_release_date = steampi.calendar.get_release_date_as_str(appID)
             if app_id_release_date is None:
                 app_id_release_date = 'an unknown date'
 
@@ -314,7 +315,7 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
             app_id = current_ballots[position]
             if app_id is not None:
                 if app_id not in release_years.keys():
-                    release_years[app_id] = get_release_year(app_id)
+                    release_years[app_id] = steampi.calendar.get_release_year(app_id)
                 if release_years[app_id] == int(target_release_year):
                     current_ballots_list.append(app_id)
                 else:
