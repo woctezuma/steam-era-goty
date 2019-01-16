@@ -114,7 +114,7 @@ def precompute_matches(raw_votes, steamspy_database, num_closest_neighbors=1,
     matches = dict()
 
     for voter in raw_votes.keys():
-        for (_, raw_name) in raw_votes[voter].items():
+        for raw_name in raw_votes[voter].values():
             if raw_name not in seen_game_names:
                 seen_game_names.add(raw_name)
 
