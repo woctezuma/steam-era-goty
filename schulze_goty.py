@@ -17,10 +17,9 @@ def parse_votes(data, num_games_per_voter=5):
         voted_games = [tokens[2 * (i + 1)] for i in range(num_games_per_voter)]
 
         raw_votes[voter_name] = dict()
-        for i in range(len(voted_games)):
+        for (i, game_name) in enumerate(voted_games):
             position = num_games_per_voter - i
 
-            game_name = voted_games[i]
             raw_votes[voter_name][position] = game_name
 
     return raw_votes
@@ -289,8 +288,8 @@ def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes):
 
             positions = sorted(current_ballots.keys())
 
-            for index in range(len(ballot_distribution)):
-                if current_ballots[positions[index]] == appID:
+            for (index, position) in enumerate(positions):
+                if current_ballots[position] == appID:
                     ballot_distribution[index] += 1
 
         print('\nappID:' + appID, end='\t')
@@ -324,9 +323,9 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
                               + str(release_years[app_id]))
                         removed_app_ids.append(app_id)
 
-        for i in range(len(current_ballots_list)):
+        for (i, current_ballot) in enumerate(current_ballots_list):
             position = i + 1
-            normalized_votes[voter]['ballots'][position] = current_ballots_list[i]
+            normalized_votes[voter]['ballots'][position] = current_ballot
         for i in range(len(current_ballots_list), len(current_ballots.keys())):
             position = i + 1
             normalized_votes[voter]['ballots'][position] = None
