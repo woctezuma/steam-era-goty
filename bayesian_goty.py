@@ -21,7 +21,8 @@ def parse_data(data):
 
     for element in data:
         my_list = element.rsplit('(')
-        assert (len(my_list) == 2)
+        if not (len(my_list) == 2):
+            raise AssertionError()
 
         # Split at '|' to have the rank of the game at the head of the list
         first_part = my_list[0].split('|')
