@@ -16,7 +16,7 @@ def parse_votes(data, num_games_per_voter=5):
         voter_name = tokens[0]
         voted_games = [tokens[2 * (i + 1)] for i in range(num_games_per_voter)]
 
-        raw_votes[voter_name] = dict()
+        raw_votes[voter_name] = {}
         for (i, game_name) in enumerate(voted_games):
             position = num_games_per_voter - i
 
@@ -32,9 +32,9 @@ def normalize_votes(raw_votes, matches):
     normalized_votes = dict()
 
     for voter_name in raw_votes.keys():
-        normalized_votes[voter_name] = dict()
-        normalized_votes[voter_name]['ballots'] = dict()
-        normalized_votes[voter_name]['distances'] = dict()
+        normalized_votes[voter_name] = {}
+        normalized_votes[voter_name]['ballots'] = {}
+        normalized_votes[voter_name]['distances'] = {}
         for (position, game_name) in raw_votes[voter_name].items():
 
             if game_name in matches.keys():
@@ -110,7 +110,7 @@ def find_closest_app_id(game_name_input, steamspy_database, num_closest_neighbor
 def precompute_matches(raw_votes, steamspy_database, num_closest_neighbors=1,
                        release_year=None, max_num_tries_for_year=2):
     seen_game_names = set()
-    matches = dict()
+    matches = {}
 
     for voter in raw_votes.keys():
         for raw_name in raw_votes[voter].values():
@@ -122,11 +122,15 @@ def precompute_matches(raw_votes, steamspy_database, num_closest_neighbors=1,
                                                                             num_closest_neighbors,
                                                                             release_year, max_num_tries_for_year)
 
-                    element = dict()
-                    element['input_name'] = raw_name
-                    element['matched_appID'] = closest_appID
-                    element['matched_name'] = [steamspy_database[appID]['name'] for appID in closest_appID]
-                    element['match_distance'] = closest_distance
+                    element = {
+                        'input_name': raw_name,
+                        'matched_appID': closest_appID,
+                        'matched_name': [
+                            steamspy_database[appID]['name']
+                            for appID in closest_appID
+                        ],
+                        'match_distance': closest_distance,
+                    }
 
                     matches[raw_name] = element
 
@@ -166,7 +170,7 @@ def display_matches(matches):
 def get_hard_coded_app_id_dict():
     # Hard-coded list of game names which are wrongly matched with Levenshtein distance (cf. output/wrong_matches.txt)
 
-    hard_coded_dict = {
+    return {
         "Death of the Outsider": "614570",
         "Hellblade": "414340",
         "Nioh": "485510",
@@ -185,23 +189,17 @@ def get_hard_coded_app_id_dict():
         "Wolfenstein II": "612880",
     }
 
-    return hard_coded_dict
-
 
 def check_database_of_problematic_game_names(game_name):
     hard_coded_dict = get_hard_coded_app_id_dict()
 
-    is_a_problematic_game_name = bool(game_name in hard_coded_dict.keys())
-
-    return is_a_problematic_game_name
+    return bool(game_name in hard_coded_dict.keys())
 
 
 def find_hard_coded_app_id(game_name_input):
     hard_coded_dict = get_hard_coded_app_id_dict()
 
-    hard_coded_app_id = hard_coded_dict[game_name_input]
-
-    return hard_coded_app_id
+    return hard_coded_dict[game_name_input]
 
 
 def adapt_votes_format_for_schulze_computations(normalized_votes):
@@ -303,7 +301,7 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
 
     print()
 
-    release_years = dict()
+    release_years = {}
     removed_app_ids = []
 
     for voter in normalized_votes.keys():

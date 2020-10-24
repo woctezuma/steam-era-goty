@@ -17,11 +17,11 @@ def load_input(filename, file_encoding='utf8'):
 
 
 def parse_data(data):
-    observations = dict()
+    observations = {}
 
     for element in data:
         my_list = element.rsplit('(')
-        if not (len(my_list) == 2):
+        if len(my_list) != 2:
             raise AssertionError()
 
         # Split at '|' to have the rank of the game at the head of the list
@@ -39,7 +39,7 @@ def parse_data(data):
         rating_sum = int(tokens[1 + tokens.index('Score')])
         num_votes = int(tokens[1 + tokens.index('Votes')])
 
-        observations[game_name] = dict()
+        observations[game_name] = {}
         observations[game_name]['score'] = rating_sum / num_votes
         observations[game_name]['num_votes'] = num_votes
 
@@ -50,9 +50,11 @@ def compute_ranking(observations, prior):
     for game_name, game in observations.items():
         observations[game_name]['bayesian_score'] = compute_bayesian_score(game, prior)
 
-    ranking = sorted(observations.keys(), key=lambda x: observations[x]['bayesian_score'], reverse=True)
-
-    return ranking
+    return sorted(
+        observations.keys(),
+        key=lambda x: observations[x]['bayesian_score'],
+        reverse=True,
+    )
 
 
 def print_ranking(ranking, observations, prior):
