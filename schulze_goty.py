@@ -345,7 +345,7 @@ def compute_steam_era_goty(ballot_year, ballot_filename=None):
 
     raw_votes = parse_votes(data)
 
-    steamspy_database = steamspypi.api.load()
+    steamspy_database = steamspypi.load()
     num_closest_neighbors = 3
 
     # The following parameter can only have an effect if it is strictly greater than 1.
