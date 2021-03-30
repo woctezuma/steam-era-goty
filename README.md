@@ -2,8 +2,8 @@
 
  [![Build status][Build image]][Build] [![Updates][Dependency image]][PyUp] [![Python 3][Python3 image]][PyUp] [![Code coverage][Codecov image]][Codecov]
 
-  [Build]: https://travis-ci.org/woctezuma/steam-era-goty
-  [Build image]: https://travis-ci.org/woctezuma/steam-era-goty.svg?branch=master
+  [Build]: <https://github.com/woctezuma/steam-era-goty/actions>
+  [Build image]: <https://github.com/woctezuma/steam-era-goty/workflows/Python application/badge.svg?branch=master>
 
   [PyUp]: https://pyup.io/repos/github/woctezuma/steam-era-goty/
   [Dependency image]: https://pyup.io/repos/github/woctezuma/steam-era-goty/shield.svg
