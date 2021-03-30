@@ -3,6 +3,7 @@ import steampi.text_distances
 import steamspypi.api
 
 from bayesian_goty import load_input
+from utils import get_release_year_for_problematic_app_id
 
 
 def parse_votes(data, num_games_per_voter=5):
@@ -64,7 +65,10 @@ def constrain_app_id_search_by_year(dist, sorted_app_ids, release_year, max_num_
             iter_count = 0
             while is_the_first_match_released_in_a_wrong_year and (iter_count < max_num_tries_for_year):
                 first_match = filtered_sorted_app_ids[0]
-                matched_release_year = steampi.calendar.get_release_year(first_match)
+                try:
+                    matched_release_year = steampi.calendar.get_release_year(first_match)
+                except ValueError:
+                    matched_release_year = get_release_year_for_problematic_app_id(app_id=first_match)
 
                 is_the_first_match_released_in_a_wrong_year = bool(matched_release_year != int(release_year))
                 if is_the_first_match_released_in_a_wrong_year:
@@ -314,7 +318,10 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
             app_id = current_ballots[position]
             if app_id is not None:
                 if app_id not in release_years.keys():
-                    release_years[app_id] = steampi.calendar.get_release_year(app_id)
+                    try:
+                        release_years[app_id] = steampi.calendar.get_release_year(app_id)
+                    except ValueError:
+                        release_years[app_id] = get_release_year_for_problematic_app_id(app_id=app_id)
                 if release_years[app_id] == int(target_release_year):
                     current_ballots_list.append(app_id)
                 else:
