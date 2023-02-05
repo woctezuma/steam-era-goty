@@ -1,6 +1,9 @@
 # SteamEra Games of the Year Awards 2017
 
- [![Build status][Build image]][Build] [![Updates][Dependency image]][PyUp] [![Python 3][Python3 image]][PyUp] [![Code coverage][Codecov image]][Codecov]
+ [![Build status][Build image]][Build]
+ [![Updates][Dependency image]][PyUp]
+ [![Python 3][Python3 image]][PyUp]
+ [![Code coverage][Codecov image]][Codecov]
 
   [Build]: <https://github.com/woctezuma/steam-era-goty/actions>
   [Build image]: <https://github.com/woctezuma/steam-era-goty/workflows/Python application/badge.svg?branch=master>
