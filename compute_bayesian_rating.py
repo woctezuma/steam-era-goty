@@ -5,7 +5,7 @@ import numpy as np
 
 
 def choose_prior(observations, verbose=False):
-    prior = dict()
+    prior = {}
 
     scores = [
         game['score'] for game in observations.values() if game['score'] is not None
@@ -25,7 +25,7 @@ def choose_prior(observations, verbose=False):
         print(
             [
                 game_name
-                for game_name in observations.keys()
+                for game_name in observations
                 if observations[game_name]['score'] >= score_max
             ],
         )
@@ -34,7 +34,7 @@ def choose_prior(observations, verbose=False):
         print(
             [
                 game_name
-                for game_name in observations.keys()
+                for game_name in observations
                 if observations[game_name]['num_votes'] >= vote_max
             ],
         )
@@ -61,14 +61,14 @@ def compute_bayesian_score(game, prior):
 
 
 def main():
-    prior = dict()
+    prior = {}
     prior['score'] = 0.7
     prior['num_votes'] = pow(10, 3)
 
     # Loop over the number of reviews
     for num_reviews in [pow(10, n) for n in range(5)]:
         # Display the Bayesian rating of a game with as many positive and negative reviews
-        game = dict()
+        game = {}
         game['score'] = 0.5
         game['num_votes'] = num_reviews
 

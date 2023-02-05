@@ -9,7 +9,7 @@ from utils import get_release_year_for_problematic_app_id
 def parse_votes(data, num_games_per_voter=5):
     import re
 
-    raw_votes = dict()
+    raw_votes = {}
 
     for element in data:
         tokens = re.split('(;)', element)
@@ -17,7 +17,7 @@ def parse_votes(data, num_games_per_voter=5):
         voter_name = tokens[0]
         voted_games = [tokens[2 * (i + 1)] for i in range(num_games_per_voter)]
 
-        raw_votes[voter_name] = dict()
+        raw_votes[voter_name] = {}
         for i, game_name in enumerate(voted_games):
             position = num_games_per_voter - i
 
@@ -30,14 +30,14 @@ def normalize_votes(raw_votes, matches):
     # Index of the first neighbor
     neighbor_reference_index = 0
 
-    normalized_votes = dict()
+    normalized_votes = {}
 
-    for voter_name in raw_votes.keys():
-        normalized_votes[voter_name] = dict()
-        normalized_votes[voter_name]['ballots'] = dict()
-        normalized_votes[voter_name]['distances'] = dict()
+    for voter_name in raw_votes:
+        normalized_votes[voter_name] = {}
+        normalized_votes[voter_name]['ballots'] = {}
+        normalized_votes[voter_name]['distances'] = {}
         for position, game_name in raw_votes[voter_name].items():
-            if game_name in matches.keys():
+            if game_name in matches:
                 normalized_votes[voter_name]['ballots'][position] = matches[game_name][
                     'matched_appID'
                 ][neighbor_reference_index]
@@ -151,9 +151,9 @@ def precompute_matches(
     max_num_tries_for_year=2,
 ):
     seen_game_names = set()
-    matches = dict()
+    matches = {}
 
-    for voter in raw_votes.keys():
+    for voter in raw_votes:
         for raw_name in raw_votes[voter].values():
             if raw_name not in seen_game_names:
                 seen_game_names.add(raw_name)
@@ -167,7 +167,7 @@ def precompute_matches(
                         max_num_tries_for_year,
                     )
 
-                    element = dict()
+                    element = {}
                     element['input_name'] = raw_name
                     element['matched_appID'] = closest_appID
                     element['matched_name'] = [
@@ -253,7 +253,7 @@ def get_hard_coded_app_id_dict():
 def check_database_of_problematic_game_names(game_name):
     hard_coded_dict = get_hard_coded_app_id_dict()
 
-    is_a_problematic_game_name = bool(game_name in hard_coded_dict.keys())
+    is_a_problematic_game_name = bool(game_name in hard_coded_dict)
 
     return is_a_problematic_game_name
 
@@ -269,7 +269,7 @@ def find_hard_coded_app_id(game_name_input):
 def adapt_votes_format_for_schulze_computations(normalized_votes):
     candidate_names = set()
 
-    for voter in normalized_votes.keys():
+    for voter in normalized_votes:
         current_ballots = normalized_votes[voter]['ballots']
         for position in sorted(current_ballots.keys()):
             app_id = current_ballots[position]
@@ -278,7 +278,7 @@ def adapt_votes_format_for_schulze_computations(normalized_votes):
 
     weighted_ranks = []
 
-    for voter in normalized_votes.keys():
+    for voter in normalized_votes:
         current_ballots = normalized_votes[voter]['ballots']
         current_ranking = []
         currently_seen_candidates = set()
@@ -331,7 +331,7 @@ def print_schulze_ranking(schulze_ranking, steamspy_database):
                 app_id_release_date = 'an unknown date'
 
             print(
-                '{0:2} | '.format(rank + 1)
+                f'{rank + 1:2} | '
                 + game_name.strip()
                 + ' (appID: '
                 + appID
@@ -347,7 +347,7 @@ def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes):
     for appID in app_id_group:
         ballot_distribution = None
 
-        for voter_name in normalized_votes.keys():
+        for voter_name in normalized_votes:
             current_ballots = normalized_votes[voter_name]['ballots']
 
             if ballot_distribution is None:
@@ -370,10 +370,10 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
 
     print()
 
-    release_years = dict()
+    release_years = {}
     removed_app_ids = []
 
-    for voter in normalized_votes.keys():
+    for voter in normalized_votes:
         current_ballots = normalized_votes[voter]['ballots']
 
         current_ballots_list = []

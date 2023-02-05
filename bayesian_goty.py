@@ -6,7 +6,7 @@ from compute_bayesian_rating import choose_prior, compute_bayesian_score
 def load_input(filename, file_encoding='utf8'):
     data = []
 
-    with open(filename, 'r', encoding=file_encoding) as f:
+    with open(filename, encoding=file_encoding) as f:
         for line in f.readlines():
             line = line.strip()
             # Remove empty lines and comments
@@ -17,7 +17,7 @@ def load_input(filename, file_encoding='utf8'):
 
 
 def parse_data(data):
-    observations = dict()
+    observations = {}
 
     for element in data:
         my_list = element.rsplit('(')
@@ -34,11 +34,11 @@ def parse_data(data):
 
         second_part = my_list[1]
         # Reference: https://stackoverflow.com/a/1059601
-        tokens = re.split('\W+', second_part)
+        tokens = re.split('\\W+', second_part)
         rating_sum = int(tokens[1 + tokens.index('Score')])
         num_votes = int(tokens[1 + tokens.index('Votes')])
 
-        observations[game_name] = dict()
+        observations[game_name] = {}
         observations[game_name]['score'] = rating_sum / num_votes
         observations[game_name]['num_votes'] = num_votes
 
