@@ -7,8 +7,14 @@ import numpy as np
 def choose_prior(observations, verbose=False):
     prior = dict()
 
-    scores = [game['score'] for game in observations.values() if game['score'] is not None]
-    votes = [game['num_votes'] for game in observations.values() if game['num_votes'] is not None]
+    scores = [
+        game['score'] for game in observations.values() if game['score'] is not None
+    ]
+    votes = [
+        game['num_votes']
+        for game in observations.values()
+        if game['num_votes'] is not None
+    ]
 
     # Data visualization to help choose a good prior
     if verbose:
@@ -16,10 +22,22 @@ def choose_prior(observations, verbose=False):
         vote_max = np.max(votes)
 
         print('Highest average score:')
-        print([game_name for game_name in observations.keys() if observations[game_name]['score'] >= score_max])
+        print(
+            [
+                game_name
+                for game_name in observations.keys()
+                if observations[game_name]['score'] >= score_max
+            ],
+        )
 
         print('Highest number of votes:')
-        print([game_name for game_name in observations.keys() if observations[game_name]['num_votes'] >= vote_max])
+        print(
+            [
+                game_name
+                for game_name in observations.keys()
+                if observations[game_name]['num_votes'] >= vote_max
+            ],
+        )
 
         plt.figure()
         plt.scatter(scores, votes)
@@ -35,8 +53,9 @@ def choose_prior(observations, verbose=False):
 
 
 def compute_bayesian_score(game, prior):
-    bayesian_score = (prior['num_votes'] * prior['score'] + game['num_votes'] * game['score']) \
-                     / (prior['num_votes'] + game['num_votes'])
+    bayesian_score = (
+        prior['num_votes'] * prior['score'] + game['num_votes'] * game['score']
+    ) / (prior['num_votes'] + game['num_votes'])
 
     return bayesian_score
 
@@ -54,7 +73,12 @@ def main():
         game['num_votes'] = num_reviews
 
         bayesian_rating = compute_bayesian_score(game, prior)
-        print("#reviews = " + str(num_reviews) + "\tBayesian rating = " + str(bayesian_rating))
+        print(
+            "#reviews = "
+            + str(num_reviews)
+            + "\tBayesian rating = "
+            + str(bayesian_rating),
+        )
 
     return True
 

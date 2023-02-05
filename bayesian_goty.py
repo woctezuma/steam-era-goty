@@ -29,8 +29,7 @@ def parse_data(data):
         # Remove the rank of the game
         game_name_list = first_part[1:]
         # Concatenate the remaining elements with '|'
-        game_name = '|'.join(game_name_list) \
-            # Remove leading and trailing whitespaces
+        game_name = '|'.join(game_name_list)  # Remove leading and trailing whitespaces
         game_name = game_name.strip()
 
         second_part = my_list[1]
@@ -50,7 +49,11 @@ def compute_ranking(observations, prior):
     for game_name, game in observations.items():
         observations[game_name]['bayesian_score'] = compute_bayesian_score(game, prior)
 
-    ranking = sorted(observations.keys(), key=lambda x: observations[x]['bayesian_score'], reverse=True)
+    ranking = sorted(
+        observations.keys(),
+        key=lambda x: observations[x]['bayesian_score'],
+        reverse=True,
+    )
 
     return ranking
 
@@ -60,13 +63,24 @@ def print_ranking(ranking, observations, prior):
 
     for rank, entry in enumerate(ranking):
         game_name = entry.strip()
-        sum_scores = observations[game_name]['score'] * observations[game_name]['num_votes']
+        sum_scores = (
+            observations[game_name]['score'] * observations[game_name]['num_votes']
+        )
         votes = observations[game_name]['num_votes']
         aps = observations[game_name]['score']
         bayesian_score = observations[game_name]['bayesian_score']
 
         sentence = '{0:3} | {1} (Score: {2:.0f} | Votes: {3} | APS: {4:.2f} | Bayesian Rating: {5:.2f})'
-        print(sentence.format(rank + 1, game_name, sum_scores, votes, aps, bayesian_score))
+        print(
+            sentence.format(
+                rank + 1,
+                game_name,
+                sum_scores,
+                votes,
+                aps,
+                bayesian_score,
+            ),
+        )
 
     sentence = '\nNB: Bayesian Prior (Score: {0:.2f} | Votes: {1:.2f})'
     print(sentence.format(prior['score'], prior['num_votes']))

@@ -18,7 +18,7 @@ def parse_votes(data, num_games_per_voter=5):
         voted_games = [tokens[2 * (i + 1)] for i in range(num_games_per_voter)]
 
         raw_votes[voter_name] = dict()
-        for (i, game_name) in enumerate(voted_games):
+        for i, game_name in enumerate(voted_games):
             position = num_games_per_voter - i
 
             raw_votes[voter_name][position] = game_name
@@ -36,14 +36,14 @@ def normalize_votes(raw_votes, matches):
         normalized_votes[voter_name] = dict()
         normalized_votes[voter_name]['ballots'] = dict()
         normalized_votes[voter_name]['distances'] = dict()
-        for (position, game_name) in raw_votes[voter_name].items():
-
+        for position, game_name in raw_votes[voter_name].items():
             if game_name in matches.keys():
-
-                normalized_votes[voter_name]['ballots'][position] = matches[game_name]['matched_appID'][
-                    neighbor_reference_index]
-                normalized_votes[voter_name]['distances'][position] = matches[game_name]['match_distance'][
-                    neighbor_reference_index]
+                normalized_votes[voter_name]['ballots'][position] = matches[game_name][
+                    'matched_appID'
+                ][neighbor_reference_index]
+                normalized_votes[voter_name]['distances'][position] = matches[
+                    game_name
+                ]['match_distance'][neighbor_reference_index]
             else:
                 normalized_votes[voter_name]['ballots'][position] = None
                 normalized_votes[voter_name]['distances'][position] = None
@@ -51,7 +51,12 @@ def normalize_votes(raw_votes, matches):
     return normalized_votes
 
 
-def constrain_app_id_search_by_year(dist, sorted_app_ids, release_year, max_num_tries_for_year):
+def constrain_app_id_search_by_year(
+    dist,
+    sorted_app_ids,
+    release_year,
+    max_num_tries_for_year,
+):
     filtered_sorted_app_ids = sorted_app_ids.copy()
 
     if release_year is not None:
@@ -63,14 +68,22 @@ def constrain_app_id_search_by_year(dist, sorted_app_ids, release_year, max_num_
             # Warhammer & Warhammer II, we would only keep the game released in the target year (2017), i.e. the sequel.
             is_the_first_match_released_in_a_wrong_year = True
             iter_count = 0
-            while is_the_first_match_released_in_a_wrong_year and (iter_count < max_num_tries_for_year):
+            while is_the_first_match_released_in_a_wrong_year and (
+                iter_count < max_num_tries_for_year
+            ):
                 first_match = filtered_sorted_app_ids[0]
                 try:
-                    matched_release_year = steampi.calendar.get_release_year(first_match)
+                    matched_release_year = steampi.calendar.get_release_year(
+                        first_match,
+                    )
                 except ValueError:
-                    matched_release_year = get_release_year_for_problematic_app_id(app_id=first_match)
+                    matched_release_year = get_release_year_for_problematic_app_id(
+                        app_id=first_match,
+                    )
 
-                is_the_first_match_released_in_a_wrong_year = bool(matched_release_year != int(release_year))
+                is_the_first_match_released_in_a_wrong_year = bool(
+                    matched_release_year != int(release_year),
+                )
                 if is_the_first_match_released_in_a_wrong_year:
                     filtered_sorted_app_ids.pop(0)
 
@@ -82,37 +95,61 @@ def constrain_app_id_search_by_year(dist, sorted_app_ids, release_year, max_num_
     return filtered_sorted_app_ids
 
 
-def apply_hard_coded_fixes_to_app_id_search(game_name_input, filtered_sorted_app_ids, num_closest_neighbors):
+def apply_hard_coded_fixes_to_app_id_search(
+    game_name_input,
+    filtered_sorted_app_ids,
+    num_closest_neighbors,
+):
     closest_app_id = [find_hard_coded_app_id(game_name_input)]
     if num_closest_neighbors > 1:
-        closest_app_id.extend(filtered_sorted_app_ids[0:(num_closest_neighbors - 1)])
+        closest_app_id.extend(filtered_sorted_app_ids[0 : (num_closest_neighbors - 1)])
 
     return closest_app_id
 
 
-def find_closest_app_id(game_name_input, steamspy_database, num_closest_neighbors=1,
-                        release_year=None, max_num_tries_for_year=2):
-    (sorted_app_ids, dist) = steampi.text_distances.find_most_similar_game_names(game_name_input, steamspy_database)
+def find_closest_app_id(
+    game_name_input,
+    steamspy_database,
+    num_closest_neighbors=1,
+    release_year=None,
+    max_num_tries_for_year=2,
+):
+    (sorted_app_ids, dist) = steampi.text_distances.find_most_similar_game_names(
+        game_name_input,
+        steamspy_database,
+    )
 
     filtered_sorted_app_ids = sorted_app_ids
 
     if release_year is not None:
-        filtered_sorted_app_ids = constrain_app_id_search_by_year(dist, sorted_app_ids, release_year,
-                                                                  max_num_tries_for_year)
+        filtered_sorted_app_ids = constrain_app_id_search_by_year(
+            dist,
+            sorted_app_ids,
+            release_year,
+            max_num_tries_for_year,
+        )
 
     closest_app_id = filtered_sorted_app_ids[0:num_closest_neighbors]
 
     if check_database_of_problematic_game_names(game_name_input):
-        closest_app_id = apply_hard_coded_fixes_to_app_id_search(game_name_input, filtered_sorted_app_ids,
-                                                                 num_closest_neighbors)
+        closest_app_id = apply_hard_coded_fixes_to_app_id_search(
+            game_name_input,
+            filtered_sorted_app_ids,
+            num_closest_neighbors,
+        )
 
     closest_distance = [dist[app_id] for app_id in closest_app_id]
 
     return closest_app_id, closest_distance
 
 
-def precompute_matches(raw_votes, steamspy_database, num_closest_neighbors=1,
-                       release_year=None, max_num_tries_for_year=2):
+def precompute_matches(
+    raw_votes,
+    steamspy_database,
+    num_closest_neighbors=1,
+    release_year=None,
+    max_num_tries_for_year=2,
+):
     seen_game_names = set()
     matches = dict()
 
@@ -122,14 +159,20 @@ def precompute_matches(raw_votes, steamspy_database, num_closest_neighbors=1,
                 seen_game_names.add(raw_name)
 
                 if raw_name != '':
-                    (closest_appID, closest_distance) = find_closest_app_id(raw_name, steamspy_database,
-                                                                            num_closest_neighbors,
-                                                                            release_year, max_num_tries_for_year)
+                    (closest_appID, closest_distance) = find_closest_app_id(
+                        raw_name,
+                        steamspy_database,
+                        num_closest_neighbors,
+                        release_year,
+                        max_num_tries_for_year,
+                    )
 
                     element = dict()
                     element['input_name'] = raw_name
                     element['matched_appID'] = closest_appID
-                    element['matched_name'] = [steamspy_database[appID]['name'] for appID in closest_appID]
+                    element['matched_name'] = [
+                        steamspy_database[appID]['name'] for appID in closest_appID
+                    ]
                     element['match_distance'] = closest_distance
 
                     matches[raw_name] = element
@@ -141,9 +184,11 @@ def display_matches(matches):
     # Index of the neighbor used to sort keys of the matches dictionary
     neighbor_reference_index = 0
 
-    sorted_keys = sorted(matches.keys(),
-                         key=lambda x: matches[x]['match_distance'][neighbor_reference_index] / (
-                                 1 + len(matches[x]['input_name'])))
+    sorted_keys = sorted(
+        matches.keys(),
+        key=lambda x: matches[x]['match_distance'][neighbor_reference_index]
+        / (1 + len(matches[x]['input_name'])),
+    )
 
     for game in sorted_keys:
         element = matches[game]
@@ -152,15 +197,28 @@ def display_matches(matches):
         game_name = element['input_name']
 
         if dist_reference > 0 and check_database_of_problematic_game_names(game_name):
-
-            print('\n' + game_name
-                  + ' (' + 'length:' + str(len(game_name)) + ')'
-                  + ' ---> ', end='')
+            print(
+                '\n'
+                + game_name
+                + ' ('
+                + 'length:'
+                + str(len(game_name))
+                + ')'
+                + ' ---> ',
+                end='',
+            )
             for neighbor_index in range(len(element['match_distance'])):
                 dist = element['match_distance'][neighbor_index]
-                print(element['matched_name'][neighbor_index]
-                      + ' (appID: ' + element['matched_appID'][neighbor_index]
-                      + ' ; ' + 'distance:' + str(dist) + ')', end='\t')
+                print(
+                    element['matched_name'][neighbor_index]
+                    + ' (appID: '
+                    + element['matched_appID'][neighbor_index]
+                    + ' ; '
+                    + 'distance:'
+                    + str(dist)
+                    + ')',
+                    end='\t',
+                )
 
     print()
 
@@ -246,7 +304,9 @@ def compute_schulze_ranking(normalized_votes, steamspy_database):
 
     import schulze
 
-    (candidate_names, weighted_ranks) = adapt_votes_format_for_schulze_computations(normalized_votes)
+    (candidate_names, weighted_ranks) = adapt_votes_format_for_schulze_computations(
+        normalized_votes,
+    )
 
     schulze_ranking = schulze.compute_ranks(candidate_names, weighted_ranks)
 
@@ -258,7 +318,7 @@ def compute_schulze_ranking(normalized_votes, steamspy_database):
 def print_schulze_ranking(schulze_ranking, steamspy_database):
     print()
 
-    for (rank, appID_group) in enumerate(schulze_ranking):
+    for rank, appID_group in enumerate(schulze_ranking):
 
         def get_game_name(app_id):
             return steamspy_database[app_id]['name']
@@ -270,18 +330,21 @@ def print_schulze_ranking(schulze_ranking, steamspy_database):
             if app_id_release_date is None:
                 app_id_release_date = 'an unknown date'
 
-            print('{0:2} | '.format(rank + 1)
-                  + game_name.strip()
-                  + ' (appID: ' + appID
-                  + ', released on ' + app_id_release_date + ')'
-                  )
+            print(
+                '{0:2} | '.format(rank + 1)
+                + game_name.strip()
+                + ' (appID: '
+                + appID
+                + ', released on '
+                + app_id_release_date
+                + ')',
+            )
 
     return
 
 
 def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes):
     for appID in app_id_group:
-
         ballot_distribution = None
 
         for voter_name in normalized_votes.keys():
@@ -292,7 +355,7 @@ def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes):
 
             positions = sorted(current_ballots.keys())
 
-            for (index, position) in enumerate(positions):
+            for index, position in enumerate(positions):
                 if current_ballots[position] == appID:
                     ballot_distribution[index] += 1
 
@@ -319,18 +382,26 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
             if app_id is not None:
                 if app_id not in release_years.keys():
                     try:
-                        release_years[app_id] = steampi.calendar.get_release_year(app_id)
+                        release_years[app_id] = steampi.calendar.get_release_year(
+                            app_id,
+                        )
                     except ValueError:
-                        release_years[app_id] = get_release_year_for_problematic_app_id(app_id=app_id)
+                        release_years[app_id] = get_release_year_for_problematic_app_id(
+                            app_id=app_id,
+                        )
                 if release_years[app_id] == int(target_release_year):
                     current_ballots_list.append(app_id)
                 else:
                     if app_id not in removed_app_ids:
-                        print('AppID ' + app_id + ' was removed because it was released in '
-                              + str(release_years[app_id]))
+                        print(
+                            'AppID '
+                            + app_id
+                            + ' was removed because it was released in '
+                            + str(release_years[app_id]),
+                        )
                         removed_app_ids.append(app_id)
 
-        for (i, current_ballot) in enumerate(current_ballots_list):
+        for i, current_ballot in enumerate(current_ballots_list):
             position = i + 1
             normalized_votes[voter]['ballots'][position] = current_ballot
         for i in range(len(current_ballots_list), len(current_ballots.keys())):
@@ -344,7 +415,9 @@ def compute_steam_era_goty(ballot_year, ballot_filename=None):
     release_year = str(ballot_year)
 
     if ballot_filename is None:
-        ballot_filename = 'data/anonymized_votes/steam_resetera_' + release_year + '_goty_votes.csv'
+        ballot_filename = (
+            'data/anonymized_votes/steam_resetera_' + release_year + '_goty_votes.csv'
+        )
 
     file_encoding = 'cp1252'  # Reference: https://stackoverflow.com/q/12468179
 
@@ -358,14 +431,22 @@ def compute_steam_era_goty(ballot_year, ballot_filename=None):
     # The following parameter can only have an effect if it is strictly greater than 1.
     max_num_tries_for_year = 2
 
-    matches = precompute_matches(raw_votes, steamspy_database, num_closest_neighbors,
-                                 release_year, max_num_tries_for_year)
+    matches = precompute_matches(
+        raw_votes,
+        steamspy_database,
+        num_closest_neighbors,
+        release_year,
+        max_num_tries_for_year,
+    )
 
     display_matches(matches)
 
     normalized_votes = normalize_votes(raw_votes, matches)
 
-    normalized_votes = filter_out_votes_for_wrong_release_years(normalized_votes, release_year)
+    normalized_votes = filter_out_votes_for_wrong_release_years(
+        normalized_votes,
+        release_year,
+    )
 
     schulze_ranking = compute_schulze_ranking(normalized_votes, steamspy_database)
 
