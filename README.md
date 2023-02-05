@@ -3,16 +3,6 @@
  [![Build status][Build image]][Build]
  [![Code coverage][Codecov image]][Codecov]
 
-  [Build]: <https://github.com/woctezuma/steam-era-goty/actions>
-  [Build image]: <https://github.com/woctezuma/steam-era-goty/workflows/Python application/badge.svg?branch=master>
-
-  [PyUp]: https://pyup.io/repos/github/woctezuma/steam-era-goty/
-  [Dependency image]: https://pyup.io/repos/github/woctezuma/steam-era-goty/shield.svg
-  [Python3 image]: https://pyup.io/repos/github/woctezuma/steam-era-goty/python-3-shield.svg
-
-  [Codecov]: https://codecov.io/gh/woctezuma/steam-era-goty
-  [Codecov image]: https://codecov.io/gh/woctezuma/steam-era-goty/branch/master/graph/badge.svg
-
 ## Goal
 
 To rank the best games of the year, a Bayesian Rating is computed [on RPGCodex](http://www.rpgcodex.net/content.php?id=10819), which provides a solid ranking. However, this methodology is not applied [on SteamGAF/ERA](https://www.resetera.com/threads/steamera-games-of-the-year-awards-2017.19342/), and a sum of scores is applied instead (think Eurovision). Our goal is to use the data shown on SteamGAF/ERA and re-rank games with other methods:
@@ -67,4 +57,16 @@ Full result is [here](output/schulze_ranking.txt).
 * https://en.wikipedia.org/wiki/Ranked_voting
 
 * https://en.wikipedia.org/wiki/Schulze_method
+
+<!-- Definitions -->
+
+  [Build]: <https://github.com/woctezuma/steam-era-goty/actions>
+  [Build image]: <https://github.com/woctezuma/steam-era-goty/workflows/Python application/badge.svg?branch=master>
+
+  [PyUp]: https://pyup.io/repos/github/woctezuma/steam-era-goty/
+  [Dependency image]: https://pyup.io/repos/github/woctezuma/steam-era-goty/shield.svg
+  [Python3 image]: https://pyup.io/repos/github/woctezuma/steam-era-goty/python-3-shield.svg
+
+  [Codecov]: https://codecov.io/gh/woctezuma/steam-era-goty
+  [Codecov image]: https://codecov.io/gh/woctezuma/steam-era-goty/branch/master/graph/badge.svg
 
