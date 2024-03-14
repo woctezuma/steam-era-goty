@@ -1,7 +1,7 @@
 Faker==16.6.1
 matplotlib==3.6.3
 numpy==1.26.4
-python-Levenshtein==0.20.9
+python-Levenshtein==0.25.0
 requests==2.31.0
 schulze==0.1
 steamspypi==1.1.1
