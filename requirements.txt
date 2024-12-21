@@ -1,6 +1,6 @@
 Faker==24.2.0
 matplotlib==3.8.3
-numpy==1.26.4
+numpy==2.2.1
 python-Levenshtein==0.25.0
 requests==2.31.0
 schulze==0.1
