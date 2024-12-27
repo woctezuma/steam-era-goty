@@ -7,8 +7,8 @@ def load_input(filename, file_encoding="utf8"):
     data = []
 
     with open(filename, encoding=file_encoding) as f:
-        for line in f:
-            line = line.strip()
+        for raw_line in f:
+            line = raw_line.strip()
             # Remove empty lines and comments
             if len(line) > 0 and line[0:2] != "# ":
                 data.append(line)
