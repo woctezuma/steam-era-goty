@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from bayesian_goty import load_input
 
 
@@ -28,7 +30,7 @@ def write_output(anonymized_data, output_filename, file_encoding) -> None:
 
     pathlib.Path(data_path).mkdir(parents=True, exist_ok=True)
 
-    with open(output_filename, "w", encoding=file_encoding) as outfile:
+    with Path(output_filename).open("w", encoding=file_encoding) as outfile:
         for element in anonymized_data:
             print(element, file=outfile)
 

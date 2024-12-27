@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 
 from compute_bayesian_rating import choose_prior, compute_bayesian_score
 
@@ -6,7 +7,7 @@ from compute_bayesian_rating import choose_prior, compute_bayesian_score
 def load_input(filename, file_encoding="utf8"):
     data = []
 
-    with open(filename, encoding=file_encoding) as f:
+    with Path(filename).open(encoding=file_encoding) as f:
         for raw_line in f:
             line = raw_line.strip()
             # Remove empty lines and comments
