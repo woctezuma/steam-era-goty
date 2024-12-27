@@ -12,7 +12,7 @@ def parse_votes(data, num_games_per_voter=5):
     raw_votes = {}
 
     for element in data:
-        tokens = re.split('(;)', element)
+        tokens = re.split("(;)", element)
 
         voter_name = tokens[0]
         voted_games = [tokens[2 * (i + 1)] for i in range(num_games_per_voter)]
@@ -34,19 +34,19 @@ def normalize_votes(raw_votes, matches):
 
     for voter_name in raw_votes:
         normalized_votes[voter_name] = {}
-        normalized_votes[voter_name]['ballots'] = {}
-        normalized_votes[voter_name]['distances'] = {}
+        normalized_votes[voter_name]["ballots"] = {}
+        normalized_votes[voter_name]["distances"] = {}
         for position, game_name in raw_votes[voter_name].items():
             if game_name in matches:
-                normalized_votes[voter_name]['ballots'][position] = matches[game_name][
-                    'matched_appID'
+                normalized_votes[voter_name]["ballots"][position] = matches[game_name][
+                    "matched_appID"
                 ][neighbor_reference_index]
-                normalized_votes[voter_name]['distances'][position] = matches[
+                normalized_votes[voter_name]["distances"][position] = matches[
                     game_name
-                ]['match_distance'][neighbor_reference_index]
+                ]["match_distance"][neighbor_reference_index]
             else:
-                normalized_votes[voter_name]['ballots'][position] = None
-                normalized_votes[voter_name]['distances'][position] = None
+                normalized_votes[voter_name]["ballots"][position] = None
+                normalized_votes[voter_name]["distances"][position] = None
 
     return normalized_votes
 
@@ -158,7 +158,7 @@ def precompute_matches(
             if raw_name not in seen_game_names:
                 seen_game_names.add(raw_name)
 
-                if raw_name != '':
+                if raw_name != "":
                     (closest_appID, closest_distance) = find_closest_app_id(
                         raw_name,
                         steamspy_database,
@@ -168,12 +168,12 @@ def precompute_matches(
                     )
 
                     element = {}
-                    element['input_name'] = raw_name
-                    element['matched_appID'] = closest_appID
-                    element['matched_name'] = [
-                        steamspy_database[appID]['name'] for appID in closest_appID
+                    element["input_name"] = raw_name
+                    element["matched_appID"] = closest_appID
+                    element["matched_name"] = [
+                        steamspy_database[appID]["name"] for appID in closest_appID
                     ]
-                    element['match_distance'] = closest_distance
+                    element["match_distance"] = closest_distance
 
                     matches[raw_name] = element
 
@@ -186,38 +186,38 @@ def display_matches(matches):
 
     sorted_keys = sorted(
         matches.keys(),
-        key=lambda x: matches[x]['match_distance'][neighbor_reference_index]
-        / (1 + len(matches[x]['input_name'])),
+        key=lambda x: matches[x]["match_distance"][neighbor_reference_index]
+        / (1 + len(matches[x]["input_name"])),
     )
 
     for game in sorted_keys:
         element = matches[game]
 
-        dist_reference = element['match_distance'][neighbor_reference_index]
-        game_name = element['input_name']
+        dist_reference = element["match_distance"][neighbor_reference_index]
+        game_name = element["input_name"]
 
         if dist_reference > 0 and check_database_of_problematic_game_names(game_name):
             print(
-                '\n'
+                "\n"
                 + game_name
-                + ' ('
-                + 'length:'
+                + " ("
+                + "length:"
                 + str(len(game_name))
-                + ')'
-                + ' ---> ',
-                end='',
+                + ")"
+                + " ---> ",
+                end="",
             )
-            for neighbor_index in range(len(element['match_distance'])):
-                dist = element['match_distance'][neighbor_index]
+            for neighbor_index in range(len(element["match_distance"])):
+                dist = element["match_distance"][neighbor_index]
                 print(
-                    element['matched_name'][neighbor_index]
-                    + ' (appID: '
-                    + element['matched_appID'][neighbor_index]
-                    + ' ; '
-                    + 'distance:'
+                    element["matched_name"][neighbor_index]
+                    + " (appID: "
+                    + element["matched_appID"][neighbor_index]
+                    + " ; "
+                    + "distance:"
                     + str(dist)
-                    + ')',
-                    end='\t',
+                    + ")",
+                    end="\t",
                 )
 
     print()
@@ -270,7 +270,7 @@ def adapt_votes_format_for_schulze_computations(normalized_votes):
     candidate_names = set()
 
     for voter in normalized_votes:
-        current_ballots = normalized_votes[voter]['ballots']
+        current_ballots = normalized_votes[voter]["ballots"]
         for position in sorted(current_ballots.keys()):
             app_id = current_ballots[position]
             if app_id is not None:
@@ -279,7 +279,7 @@ def adapt_votes_format_for_schulze_computations(normalized_votes):
     weighted_ranks = []
 
     for voter in normalized_votes:
-        current_ballots = normalized_votes[voter]['ballots']
+        current_ballots = normalized_votes[voter]["ballots"]
         current_ranking = []
         currently_seen_candidates = set()
         for position in sorted(current_ballots.keys()):
@@ -321,23 +321,23 @@ def print_schulze_ranking(schulze_ranking, steamspy_database):
     for rank, appID_group in enumerate(schulze_ranking):
 
         def get_game_name(app_id):
-            return steamspy_database[app_id]['name']
+            return steamspy_database[app_id]["name"]
 
         for appID in sorted(appID_group, key=get_game_name):
             game_name = get_game_name(appID)
 
             app_id_release_date = steampi.calendar.get_release_date_as_str(appID)
             if app_id_release_date is None:
-                app_id_release_date = 'an unknown date'
+                app_id_release_date = "an unknown date"
 
             print(
-                f'{rank + 1:2} | '
+                f"{rank + 1:2} | "
                 + game_name.strip()
-                + ' (appID: '
+                + " (appID: "
                 + appID
-                + ', released on '
+                + ", released on "
                 + app_id_release_date
-                + ')',
+                + ")",
             )
 
     return
@@ -348,7 +348,7 @@ def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes):
         ballot_distribution = None
 
         for voter_name in normalized_votes:
-            current_ballots = normalized_votes[voter_name]['ballots']
+            current_ballots = normalized_votes[voter_name]["ballots"]
 
             if ballot_distribution is None:
                 ballot_distribution = [0 for _ in range(len(current_ballots))]
@@ -359,8 +359,8 @@ def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes):
                 if current_ballots[position] == appID:
                     ballot_distribution[index] += 1
 
-        print('\nappID:' + appID, end='\t')
-        print('counts of ballots with rank 1, 2, ..., 5:\t', ballot_distribution)
+        print("\nappID:" + appID, end="\t")
+        print("counts of ballots with rank 1, 2, ..., 5:\t", ballot_distribution)
 
     return
 
@@ -374,7 +374,7 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
     removed_app_ids = []
 
     for voter in normalized_votes:
-        current_ballots = normalized_votes[voter]['ballots']
+        current_ballots = normalized_votes[voter]["ballots"]
 
         current_ballots_list = []
         for position in sorted(current_ballots.keys()):
@@ -394,19 +394,19 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
                 else:
                     if app_id not in removed_app_ids:
                         print(
-                            'AppID '
+                            "AppID "
                             + app_id
-                            + ' was removed because it was released in '
+                            + " was removed because it was released in "
                             + str(release_years[app_id]),
                         )
                         removed_app_ids.append(app_id)
 
         for i, current_ballot in enumerate(current_ballots_list):
             position = i + 1
-            normalized_votes[voter]['ballots'][position] = current_ballot
+            normalized_votes[voter]["ballots"][position] = current_ballot
         for i in range(len(current_ballots_list), len(current_ballots.keys())):
             position = i + 1
-            normalized_votes[voter]['ballots'][position] = None
+            normalized_votes[voter]["ballots"][position] = None
 
     return normalized_votes
 
@@ -416,10 +416,10 @@ def compute_steam_era_goty(ballot_year, ballot_filename=None):
 
     if ballot_filename is None:
         ballot_filename = (
-            'data/anonymized_votes/steam_resetera_' + release_year + '_goty_votes.csv'
+            "data/anonymized_votes/steam_resetera_" + release_year + "_goty_votes.csv"
         )
 
-    file_encoding = 'cp1252'  # Reference: https://stackoverflow.com/q/12468179
+    file_encoding = "cp1252"  # Reference: https://stackoverflow.com/q/12468179
 
     data = load_input(ballot_filename, file_encoding)
 
@@ -456,12 +456,12 @@ def compute_steam_era_goty(ballot_year, ballot_filename=None):
 
 
 def main():
-    ballot_year = '2017'
+    ballot_year = "2017"
 
     compute_steam_era_goty(ballot_year)
 
     return True
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

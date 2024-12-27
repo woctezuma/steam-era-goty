@@ -8,8 +8,8 @@ import schulze_goty
 
 class TestAnonymizeDataMethods(unittest.TestCase):
     def test_anonymize(self):
-        example_filename = 'data/anonymized_votes/steam_resetera_2017_goty_votes.csv'
-        file_encoding = 'cp1252'
+        example_filename = "data/anonymized_votes/steam_resetera_2017_goty_votes.csv"
+        file_encoding = "cp1252"
 
         data = bayesian_goty.load_input(example_filename, file_encoding)
 
@@ -36,5 +36,5 @@ class TestSchulzeGotyMethods(unittest.TestCase):
         self.assertTrue(schulze_goty.main())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

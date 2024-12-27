@@ -6,15 +6,15 @@ def anonymize(data, author_name_token_index=0):
 
     from faker import Faker
 
-    fake = Faker('fr_FR')
+    fake = Faker("fr_FR")
 
     anonymized_data = []
 
     for element in data:
-        tokens = re.split('(;)', element)
+        tokens = re.split("(;)", element)
         tokens[author_name_token_index] = fake.name()
 
-        line = ''.join(tokens)
+        line = "".join(tokens)
 
         anonymized_data.append(line)
 
@@ -28,7 +28,7 @@ def write_output(anonymized_data, output_filename, file_encoding):
 
     pathlib.Path(data_path).mkdir(parents=True, exist_ok=True)
 
-    with open(output_filename, 'w', encoding=file_encoding) as outfile:
+    with open(output_filename, "w", encoding=file_encoding) as outfile:
         for element in anonymized_data:
             print(element, file=outfile)
 
@@ -36,9 +36,9 @@ def write_output(anonymized_data, output_filename, file_encoding):
 
 
 def main():
-    input_filename = 'data/votes_with_ids/steam_resetera_2017_goty_votes.csv'
-    output_filename = 'data/anonymized_votes/steam_resetera_2017_goty_votes.csv'
-    file_encoding = 'cp1252'
+    input_filename = "data/votes_with_ids/steam_resetera_2017_goty_votes.csv"
+    output_filename = "data/anonymized_votes/steam_resetera_2017_goty_votes.csv"
+    file_encoding = "cp1252"
 
     data = load_input(input_filename, file_encoding)
 
@@ -52,5 +52,5 @@ def main():
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
