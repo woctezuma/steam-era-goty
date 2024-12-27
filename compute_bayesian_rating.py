@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def choose_prior(observations, verbose=False):
+def choose_prior(observations, *, verbose=False):
     prior = {}
 
     scores = [

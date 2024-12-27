@@ -92,7 +92,7 @@ def main() -> bool:
     observations = parse_data(data)
 
     verbose = False
-    prior = choose_prior(observations, verbose)
+    prior = choose_prior(observations, verbose=verbose)
 
     ranking = compute_ranking(observations, prior)
 
