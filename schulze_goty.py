@@ -157,7 +157,7 @@ def precompute_matches(
             if raw_name not in seen_game_names:
                 seen_game_names.add(raw_name)
 
-                if raw_name != "":
+                if raw_name:
                     (closest_appID, closest_distance) = find_closest_app_id(
                         raw_name,
                         steamspy_database,
