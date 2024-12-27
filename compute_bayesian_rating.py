@@ -53,14 +53,12 @@ def choose_prior(observations, verbose=False):
 
 
 def compute_bayesian_score(game, prior):
-    bayesian_score = (
-        prior["num_votes"] * prior["score"] + game["num_votes"] * game["score"]
-    ) / (prior["num_votes"] + game["num_votes"])
-
-    return bayesian_score
+    return (prior["num_votes"] * prior["score"] + game["num_votes"] * game["score"]) / (
+        prior["num_votes"] + game["num_votes"]
+    )
 
 
-def main():
+def main() -> bool:
     prior = {}
     prior["score"] = 0.7
     prior["num_votes"] = pow(10, 3)

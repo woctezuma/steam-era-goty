@@ -7,7 +7,7 @@ import schulze_goty
 
 
 class TestAnonymizeDataMethods(unittest.TestCase):
-    def test_anonymize(self):
+    def test_anonymize(self) -> None:
         example_filename = "data/anonymized_votes/steam_resetera_2017_goty_votes.csv"
         file_encoding = "cp1252"
 
@@ -18,22 +18,22 @@ class TestAnonymizeDataMethods(unittest.TestCase):
 
         anonymized_data = anonymize_data.anonymize(data, author_name_token_index)
 
-        self.assertGreater(len(anonymized_data), 0)
+        assert len(anonymized_data) > 0
 
 
 class TestComputeBayesianRatingMethods(unittest.TestCase):
-    def test_main(self):
-        self.assertTrue(compute_bayesian_rating.main())
+    def test_main(self) -> None:
+        assert compute_bayesian_rating.main()
 
 
 class TestBayesianGotyMethods(unittest.TestCase):
-    def test_main(self):
-        self.assertTrue(bayesian_goty.main())
+    def test_main(self) -> None:
+        assert bayesian_goty.main()
 
 
 class TestSchulzeGotyMethods(unittest.TestCase):
-    def test_main(self):
-        self.assertTrue(schulze_goty.main())
+    def test_main(self) -> None:
+        assert schulze_goty.main()
 
 
 if __name__ == "__main__":

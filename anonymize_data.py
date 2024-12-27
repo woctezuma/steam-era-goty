@@ -21,7 +21,7 @@ def anonymize(data, author_name_token_index=0):
     return anonymized_data
 
 
-def write_output(anonymized_data, output_filename, file_encoding):
+def write_output(anonymized_data, output_filename, file_encoding) -> None:
     import pathlib
 
     data_path = pathlib.Path(output_filename).parent
@@ -32,10 +32,8 @@ def write_output(anonymized_data, output_filename, file_encoding):
         for element in anonymized_data:
             print(element, file=outfile)
 
-    return
 
-
-def main():
+def main() -> None:
     input_filename = "data/votes_with_ids/steam_resetera_2017_goty_votes.csv"
     output_filename = "data/anonymized_votes/steam_resetera_2017_goty_votes.csv"
     file_encoding = "cp1252"
@@ -48,8 +46,6 @@ def main():
     anonymized_data = anonymize(data, author_name_token_index)
 
     write_output(anonymized_data, output_filename, file_encoding)
-
-    return
 
 
 if __name__ == "__main__":

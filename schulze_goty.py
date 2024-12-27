@@ -1,7 +1,6 @@
 import steampi.calendar
 import steampi.text_distances
 import steamspypi.api
-
 from bayesian_goty import load_input
 from utils import get_release_year_for_problematic_app_id
 
@@ -180,7 +179,7 @@ def precompute_matches(
     return matches
 
 
-def display_matches(matches):
+def display_matches(matches) -> None:
     # Index of the neighbor used to sort keys of the matches dictionary
     neighbor_reference_index = 0
 
@@ -222,13 +221,11 @@ def display_matches(matches):
 
     print()
 
-    return
-
 
 def get_hard_coded_app_id_dict():
     # Hard-coded list of game names which are wrongly matched with Levenshtein distance (cf. output/wrong_matches.txt)
 
-    hard_coded_dict = {
+    return {
         "Death of the Outsider": "614570",
         "Hellblade": "414340",
         "Nioh": "485510",
@@ -247,23 +244,17 @@ def get_hard_coded_app_id_dict():
         "Wolfenstein II": "612880",
     }
 
-    return hard_coded_dict
-
 
 def check_database_of_problematic_game_names(game_name):
     hard_coded_dict = get_hard_coded_app_id_dict()
 
-    is_a_problematic_game_name = bool(game_name in hard_coded_dict)
-
-    return is_a_problematic_game_name
+    return bool(game_name in hard_coded_dict)
 
 
 def find_hard_coded_app_id(game_name_input):
     hard_coded_dict = get_hard_coded_app_id_dict()
 
-    hard_coded_app_id = hard_coded_dict[game_name_input]
-
-    return hard_coded_app_id
+    return hard_coded_dict[game_name_input]
 
 
 def adapt_votes_format_for_schulze_computations(normalized_votes):
@@ -315,7 +306,7 @@ def compute_schulze_ranking(normalized_votes, steamspy_database):
     return schulze_ranking
 
 
-def print_schulze_ranking(schulze_ranking, steamspy_database):
+def print_schulze_ranking(schulze_ranking, steamspy_database) -> None:
     print()
 
     for rank, appID_group in enumerate(schulze_ranking):
@@ -340,10 +331,8 @@ def print_schulze_ranking(schulze_ranking, steamspy_database):
                 + ")",
             )
 
-    return
 
-
-def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes):
+def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes) -> None:
     for appID in app_id_group:
         ballot_distribution = None
 
@@ -362,8 +351,6 @@ def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes):
         print("\nappID:" + appID, end="\t")
         print("counts of ballots with rank 1, 2, ..., 5:\t", ballot_distribution)
 
-    return
-
 
 def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_year):
     # Objective: remove appID which gathered votes but were not released during the target release year
@@ -380,7 +367,7 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
         for position in sorted(current_ballots.keys()):
             app_id = current_ballots[position]
             if app_id is not None:
-                if app_id not in release_years.keys():
+                if app_id not in release_years:
                     try:
                         release_years[app_id] = steampi.calendar.get_release_year(
                             app_id,
@@ -391,15 +378,14 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
                         )
                 if release_years[app_id] == int(target_release_year):
                     current_ballots_list.append(app_id)
-                else:
-                    if app_id not in removed_app_ids:
-                        print(
-                            "AppID "
-                            + app_id
-                            + " was removed because it was released in "
-                            + str(release_years[app_id]),
-                        )
-                        removed_app_ids.append(app_id)
+                elif app_id not in removed_app_ids:
+                    print(
+                        "AppID "
+                        + app_id
+                        + " was removed because it was released in "
+                        + str(release_years[app_id]),
+                    )
+                    removed_app_ids.append(app_id)
 
         for i, current_ballot in enumerate(current_ballots_list):
             position = i + 1
@@ -411,7 +397,7 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
     return normalized_votes
 
 
-def compute_steam_era_goty(ballot_year, ballot_filename=None):
+def compute_steam_era_goty(ballot_year, ballot_filename=None) -> None:
     release_year = str(ballot_year)
 
     if ballot_filename is None:
@@ -455,7 +441,7 @@ def compute_steam_era_goty(ballot_year, ballot_filename=None):
         print_ballot_distribution_for_given_appid(appID_group, normalized_votes)
 
 
-def main():
+def main() -> bool:
     ballot_year = "2017"
 
     compute_steam_era_goty(ballot_year)

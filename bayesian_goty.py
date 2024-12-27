@@ -7,7 +7,7 @@ def load_input(filename, file_encoding="utf8"):
     data = []
 
     with open(filename, encoding=file_encoding) as f:
-        for line in f.readlines():
+        for line in f:
             line = line.strip()
             # Remove empty lines and comments
             if len(line) > 0 and line[0:2] != "# ":
@@ -22,7 +22,7 @@ def parse_data(data):
     for element in data:
         my_list = element.rsplit("(")
         if not (len(my_list) == 2):
-            raise AssertionError()
+            raise AssertionError
 
         # Split at '|' to have the rank of the game at the head of the list
         first_part = my_list[0].split("|")
@@ -49,16 +49,14 @@ def compute_ranking(observations, prior):
     for game_name, game in observations.items():
         observations[game_name]["bayesian_score"] = compute_bayesian_score(game, prior)
 
-    ranking = sorted(
+    return sorted(
         observations.keys(),
         key=lambda x: observations[x]["bayesian_score"],
         reverse=True,
     )
 
-    return ranking
 
-
-def print_ranking(ranking, observations, prior):
+def print_ranking(ranking, observations, prior) -> None:
     print("Game of the Year Votes\n")
 
     for rank, entry in enumerate(ranking):
@@ -85,10 +83,8 @@ def print_ranking(ranking, observations, prior):
     sentence = "\nNB: Bayesian Prior (Score: {0:.2f} | Votes: {1:.2f})"
     print(sentence.format(prior["score"], prior["num_votes"]))
 
-    return
 
-
-def main():
+def main() -> bool:
     filename = "data/steam_resetera_2017_goty.txt"
 
     data = load_input(filename)
