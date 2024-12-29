@@ -20,7 +20,7 @@ def load_input(filename: str, file_encoding: str = "utf8") -> list[str]:
 
 
 def parse_data(data: list[str]) -> dict[str, dict]:
-    observations = {}
+    observations: dict[str, dict] = {}
 
     for element in data:
         my_list = element.rsplit("(")

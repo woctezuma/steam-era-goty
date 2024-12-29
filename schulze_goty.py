@@ -9,7 +9,7 @@ from utils import get_release_year_for_problematic_app_id
 
 
 def parse_votes(data: list[str], num_games_per_voter: int = 5) -> dict[str, dict]:
-    raw_votes = {}
+    raw_votes: dict[str, dict] = {}
 
     for element in data:
         tokens = re.split(r"(;)", element)
@@ -32,7 +32,7 @@ def normalize_votes(
     # Index of the first neighbor
     neighbor_reference_index = 0
 
-    normalized_votes = {}
+    normalized_votes: dict[str, dict] = {}
 
     for voter_name, vote_content in raw_votes.items():
         normalized_votes[voter_name] = {}
@@ -262,7 +262,7 @@ def find_hard_coded_app_id(game_name_input: str) -> str:
 
 def adapt_votes_format_for_schulze_computations(
     normalized_votes: dict[str, dict],
-) -> tuple[list[str], list[tuple[list[str], int]]]:
+) -> tuple[list[str], list[tuple[list[list[str]], int]]]:
     candidate_names = set()
 
     for voter in normalized_votes:
@@ -284,20 +284,18 @@ def adapt_votes_format_for_schulze_computations(
                 current_ranking.append([app_id])
                 currently_seen_candidates.add(app_id)
 
-        remaining_app_ids = candidate_names.difference(currently_seen_candidates)
+        remaining_app_ids = list(candidate_names.difference(currently_seen_candidates))
         current_ranking.append(remaining_app_ids)
 
         current_weight = 1
         weighted_ranks.append((current_ranking, current_weight))
 
-    candidate_names = list(candidate_names)
-
-    return candidate_names, weighted_ranks
+    return list(candidate_names), weighted_ranks
 
 
 def compute_schulze_ranking(
     normalized_votes: dict[str, dict], steamspy_database: dict[str, dict]
-) -> list[str]:
+) -> list[list[str]]:
     # Reference: https://github.com/mgp/schulze-method
 
     (candidate_names, weighted_ranks) = adapt_votes_format_for_schulze_computations(
