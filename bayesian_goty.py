@@ -3,6 +3,8 @@ from pathlib import Path
 
 from compute_bayesian_rating import choose_prior, compute_bayesian_score
 
+EXPECTED_LIST_LENGTH = 2
+
 
 def load_input(filename, file_encoding="utf8"):
     data = []
@@ -22,7 +24,7 @@ def parse_data(data):
 
     for element in data:
         my_list = element.rsplit("(")
-        if not (len(my_list) == 2):
+        if not (len(my_list) == EXPECTED_LIST_LENGTH):
             raise AssertionError
 
         # Split at '|' to have the rank of the game at the head of the list
