@@ -158,7 +158,7 @@ def precompute_matches(
                 seen_game_names.add(raw_name)
 
                 if raw_name:
-                    (closest_appID, closest_distance) = find_closest_app_id(
+                    (closest_app_id, closest_distance) = find_closest_app_id(
                         raw_name,
                         steamspy_database,
                         num_closest_neighbors,
@@ -168,9 +168,9 @@ def precompute_matches(
 
                     element = {}
                     element["input_name"] = raw_name
-                    element["matched_appID"] = closest_appID
+                    element["matched_appID"] = closest_app_id
                     element["matched_name"] = [
-                        steamspy_database[appID]["name"] for appID in closest_appID
+                        steamspy_database[appID]["name"] for appID in closest_app_id
                     ]
                     element["match_distance"] = closest_distance
 
@@ -309,15 +309,15 @@ def compute_schulze_ranking(normalized_votes, steamspy_database):
 def print_schulze_ranking(schulze_ranking, steamspy_database) -> None:
     print()
 
-    for rank, appID_group in enumerate(schulze_ranking):
+    for rank, app_id_group in enumerate(schulze_ranking):
 
         def get_game_name(app_id):
             return steamspy_database[app_id]["name"]
 
-        for appID in sorted(appID_group, key=get_game_name):
-            game_name = get_game_name(appID)
+        for app_id in sorted(app_id_group, key=get_game_name):
+            game_name = get_game_name(app_id)
 
-            app_id_release_date = steampi.calendar.get_release_date_as_str(appID)
+            app_id_release_date = steampi.calendar.get_release_date_as_str(app_id)
             if app_id_release_date is None:
                 app_id_release_date = "an unknown date"
 
@@ -325,7 +325,7 @@ def print_schulze_ranking(schulze_ranking, steamspy_database) -> None:
                 f"{rank + 1:2} | "
                 + game_name.strip()
                 + " (appID: "
-                + appID
+                + app_id
                 + ", released on "
                 + app_id_release_date
                 + ")",
@@ -333,7 +333,7 @@ def print_schulze_ranking(schulze_ranking, steamspy_database) -> None:
 
 
 def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes) -> None:
-    for appID in app_id_group:
+    for app_id in app_id_group:
         ballot_distribution = None
 
         for voter_name in normalized_votes:
@@ -345,10 +345,10 @@ def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes) ->
             positions = sorted(current_ballots.keys())
 
             for index, position in enumerate(positions):
-                if current_ballots[position] == appID:
+                if current_ballots[position] == app_id:
                     ballot_distribution[index] += 1
 
-        print("\nappID:" + appID, end="\t")
+        print("\nappID:" + app_id, end="\t")
         print("counts of ballots with rank 1, 2, ..., 5:\t", ballot_distribution)
 
 
@@ -437,8 +437,8 @@ def compute_steam_era_goty(ballot_year, ballot_filename=None) -> None:
     schulze_ranking = compute_schulze_ranking(normalized_votes, steamspy_database)
 
     num_app_id_groups_to_display = 3
-    for appID_group in schulze_ranking[0:num_app_id_groups_to_display]:
-        print_ballot_distribution_for_given_appid(appID_group, normalized_votes)
+    for app_id_group in schulze_ranking[0:num_app_id_groups_to_display]:
+        print_ballot_distribution_for_given_appid(app_id_group, normalized_votes)
 
 
 def main() -> bool:
