@@ -60,7 +60,9 @@ def compute_ranking(observations: dict[str, dict], prior: dict) -> list[str]:
 
 
 def print_ranking(
-    ranking: list[str], observations: dict[str, dict], prior: dict
+    ranking: list[str],
+    observations: dict[str, dict],
+    prior: dict,
 ) -> None:
     print("Game of the Year Votes\n")
 

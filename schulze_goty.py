@@ -28,7 +28,8 @@ def parse_votes(data: list[str], num_games_per_voter: int = 5) -> dict[str, dict
 
 
 def normalize_votes(
-    raw_votes: dict[str, dict], matches: dict[str, dict]
+    raw_votes: dict[str, dict],
+    matches: dict[str, dict],
 ) -> dict[str, dict]:
     # Index of the first neighbor
     neighbor_reference_index = 0
@@ -295,7 +296,8 @@ def adapt_votes_format_for_schulze_computations(
 
 
 def compute_schulze_ranking(
-    normalized_votes: dict[str, dict], steamspy_database: dict[str, dict]
+    normalized_votes: dict[str, dict],
+    steamspy_database: dict[str, dict],
 ) -> list[list[str]]:
     # Reference: https://github.com/mgp/schulze-method
 
@@ -311,7 +313,8 @@ def compute_schulze_ranking(
 
 
 def print_schulze_ranking(
-    schulze_ranking: list[list[str]], steamspy_database: dict[str, dict]
+    schulze_ranking: list[list[str]],
+    steamspy_database: dict[str, dict],
 ) -> None:
     print()
 
@@ -339,7 +342,8 @@ def print_schulze_ranking(
 
 
 def print_ballot_distribution_for_given_appid(
-    app_id_group: list[str], normalized_votes: dict[str, dict]
+    app_id_group: list[str],
+    normalized_votes: dict[str, dict],
 ) -> None:
     for app_id in app_id_group:
         ballot_distribution = None
@@ -361,7 +365,8 @@ def print_ballot_distribution_for_given_appid(
 
 
 def filter_out_votes_for_wrong_release_years(
-    normalized_votes: dict[str, dict], target_release_year: str
+    normalized_votes: dict[str, dict],
+    target_release_year: str,
 ) -> dict[str, dict]:
     # Objective: remove appID which gathered votes but were not released during the target release year
 
@@ -408,7 +413,8 @@ def filter_out_votes_for_wrong_release_years(
 
 
 def compute_steam_era_goty(
-    ballot_year: str, ballot_filename: str | None = None
+    ballot_year: str,
+    ballot_filename: str | None = None,
 ) -> None:
     release_year = ballot_year
 

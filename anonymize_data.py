@@ -24,7 +24,9 @@ def anonymize(data: list[str], author_name_token_index: int = 0) -> list[str]:
 
 
 def write_output(
-    anonymized_data: list[str], output_filename: str, file_encoding: str
+    anonymized_data: list[str],
+    output_filename: str,
+    file_encoding: str,
 ) -> None:
     data_path = pathlib.Path(output_filename).parent
 
