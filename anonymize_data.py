@@ -1,13 +1,12 @@
+import pathlib
+import re
 from pathlib import Path
 
 from bayesian_goty import load_input
+from faker import Faker
 
 
 def anonymize(data, author_name_token_index=0):
-    import re
-
-    from faker import Faker
-
     fake = Faker("fr_FR")
 
     anonymized_data = []
@@ -24,8 +23,6 @@ def anonymize(data, author_name_token_index=0):
 
 
 def write_output(anonymized_data, output_filename, file_encoding) -> None:
-    import pathlib
-
     data_path = pathlib.Path(output_filename).parent
 
     pathlib.Path(data_path).mkdir(parents=True, exist_ok=True)

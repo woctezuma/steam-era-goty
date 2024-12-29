@@ -1,3 +1,6 @@
+import re
+
+import schulze
 import steampi.calendar
 import steampi.text_distances
 import steamspypi.api
@@ -6,8 +9,6 @@ from utils import get_release_year_for_problematic_app_id
 
 
 def parse_votes(data, num_games_per_voter=5):
-    import re
-
     raw_votes = {}
 
     for element in data:
@@ -292,8 +293,6 @@ def adapt_votes_format_for_schulze_computations(normalized_votes):
 
 def compute_schulze_ranking(normalized_votes, steamspy_database):
     # Reference: https://github.com/mgp/schulze-method
-
-    import schulze
 
     (candidate_names, weighted_ranks) = adapt_votes_format_for_schulze_computations(
         normalized_votes,
