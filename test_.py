@@ -19,7 +19,7 @@ class TestAnonymizeDataMethods(unittest.TestCase):
 
         anonymized_data = anonymize_data.anonymize(data, author_name_token_index)
 
-        assert len(anonymized_data) > 0
+        assert anonymized_data
 
 
 class TestComputeBayesianRatingMethods(unittest.TestCase):

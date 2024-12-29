@@ -13,7 +13,7 @@ def load_input(filename: str, file_encoding: str = "utf8") -> list[str]:
         for raw_line in f:
             line = raw_line.strip()
             # Remove empty lines and comments
-            if len(line) > 0 and line[0:2] != "# ":
+            if line and line[0:2] != "# ":
                 data.append(line)
 
     return data
