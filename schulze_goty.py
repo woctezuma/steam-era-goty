@@ -146,7 +146,7 @@ def find_closest_app_id(
 
 
 def precompute_matches(
-    raw_votes: dict[str, list[str]],
+    raw_votes: dict[str, dict],
     steamspy_database: dict[str, dict],
     num_closest_neighbors: int = 1,
     release_year: str | None = None,
