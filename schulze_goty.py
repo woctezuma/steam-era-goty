@@ -34,11 +34,11 @@ def normalize_votes(
 
     normalized_votes = {}
 
-    for voter_name in raw_votes:
+    for voter_name, vote_content in raw_votes.items():
         normalized_votes[voter_name] = {}
         normalized_votes[voter_name]["ballots"] = {}
         normalized_votes[voter_name]["distances"] = {}
-        for position, game_name in raw_votes[voter_name].items():
+        for position, game_name in vote_content.items():
             if game_name in matches:
                 normalized_votes[voter_name]["ballots"][position] = matches[game_name][
                     "matched_appID"
@@ -155,8 +155,8 @@ def precompute_matches(
     seen_game_names = set()
     matches = {}
 
-    for voter in raw_votes:
-        for raw_name in raw_votes[voter].values():
+    for vote_content in raw_votes.values():
+        for raw_name in vote_content.values():
             if raw_name not in seen_game_names:
                 seen_game_names.add(raw_name)
 
