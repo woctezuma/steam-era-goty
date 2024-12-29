@@ -37,7 +37,7 @@ def parse_data(data):
 
         second_part = my_list[1]
         # Reference: https://stackoverflow.com/a/1059601
-        tokens = re.split("\\W+", second_part)
+        tokens = re.split(r"\W+", second_part)
         rating_sum = int(tokens[1 + tokens.index("Score")])
         num_votes = int(tokens[1 + tokens.index("Votes")])
 
