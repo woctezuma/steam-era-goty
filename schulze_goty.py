@@ -11,7 +11,7 @@ def parse_votes(data, num_games_per_voter=5):
     raw_votes = {}
 
     for element in data:
-        tokens = re.split("(;)", element)
+        tokens = re.split(r"(;)", element)
 
         voter_name = tokens[0]
         voted_games = [tokens[2 * (i + 1)] for i in range(num_games_per_voter)]

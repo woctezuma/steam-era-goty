@@ -13,7 +13,7 @@ def anonymize(data, author_name_token_index=0):
     anonymized_data = []
 
     for element in data:
-        tokens = re.split("(;)", element)
+        tokens = re.split(r"(;)", element)
         tokens[author_name_token_index] = fake.name()
 
         line = "".join(tokens)
