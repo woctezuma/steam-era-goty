@@ -6,7 +6,7 @@ from bayesian_goty import load_input
 from faker import Faker
 
 
-def anonymize(data, author_name_token_index=0):
+def anonymize(data: list[str], author_name_token_index: int = 0) -> list[str]:
     fake = Faker("fr_FR")
 
     anonymized_data = []
@@ -22,7 +22,9 @@ def anonymize(data, author_name_token_index=0):
     return anonymized_data
 
 
-def write_output(anonymized_data, output_filename, file_encoding) -> None:
+def write_output(
+    anonymized_data: list[str], output_filename: str, file_encoding: str
+) -> None:
     data_path = pathlib.Path(output_filename).parent
 
     pathlib.Path(data_path).mkdir(parents=True, exist_ok=True)

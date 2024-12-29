@@ -8,7 +8,7 @@ from bayesian_goty import load_input
 from utils import get_release_year_for_problematic_app_id
 
 
-def parse_votes(data, num_games_per_voter=5):
+def parse_votes(data: list[str], num_games_per_voter: int = 5) -> dict[str, dict]:
     raw_votes = {}
 
     for element in data:
@@ -26,7 +26,9 @@ def parse_votes(data, num_games_per_voter=5):
     return raw_votes
 
 
-def normalize_votes(raw_votes, matches):
+def normalize_votes(
+    raw_votes: dict[str, dict], matches: dict[str, dict]
+) -> dict[str, dict]:
     # Index of the first neighbor
     neighbor_reference_index = 0
 
@@ -52,11 +54,11 @@ def normalize_votes(raw_votes, matches):
 
 
 def constrain_app_id_search_by_year(
-    dist,
-    sorted_app_ids,
-    release_year,
-    max_num_tries_for_year,
-):
+    dist: dict[str, int],
+    sorted_app_ids: list[str],
+    release_year: str | None,
+    max_num_tries_for_year: int,
+) -> list[str]:
     filtered_sorted_app_ids = sorted_app_ids.copy()
 
     if release_year is not None:
@@ -96,10 +98,10 @@ def constrain_app_id_search_by_year(
 
 
 def apply_hard_coded_fixes_to_app_id_search(
-    game_name_input,
-    filtered_sorted_app_ids,
-    num_closest_neighbors,
-):
+    game_name_input: str,
+    filtered_sorted_app_ids: list[str],
+    num_closest_neighbors: int,
+) -> list[str]:
     closest_app_id = [find_hard_coded_app_id(game_name_input)]
     if num_closest_neighbors > 1:
         closest_app_id.extend(filtered_sorted_app_ids[0 : (num_closest_neighbors - 1)])
@@ -108,12 +110,12 @@ def apply_hard_coded_fixes_to_app_id_search(
 
 
 def find_closest_app_id(
-    game_name_input,
-    steamspy_database,
-    num_closest_neighbors=1,
-    release_year=None,
-    max_num_tries_for_year=2,
-):
+    game_name_input: str,
+    steamspy_database: dict[str, dict],
+    num_closest_neighbors: int = 1,
+    release_year: str | None = None,
+    max_num_tries_for_year: int = 2,
+) -> tuple[list[str], list[int]]:
     (sorted_app_ids, dist) = steampi.text_distances.find_most_similar_game_names(
         game_name_input,
         steamspy_database,
@@ -144,12 +146,12 @@ def find_closest_app_id(
 
 
 def precompute_matches(
-    raw_votes,
-    steamspy_database,
-    num_closest_neighbors=1,
-    release_year=None,
-    max_num_tries_for_year=2,
-):
+    raw_votes: dict[str, list[str]],
+    steamspy_database: dict[str, dict],
+    num_closest_neighbors: int = 1,
+    release_year: str | None = None,
+    max_num_tries_for_year: int = 2,
+) -> dict[str, dict]:
     seen_game_names = set()
     matches = {}
 
@@ -180,7 +182,7 @@ def precompute_matches(
     return matches
 
 
-def display_matches(matches) -> None:
+def display_matches(matches: dict[str, dict]) -> None:
     # Index of the neighbor used to sort keys of the matches dictionary
     neighbor_reference_index = 0
 
@@ -223,7 +225,7 @@ def display_matches(matches) -> None:
     print()
 
 
-def get_hard_coded_app_id_dict():
+def get_hard_coded_app_id_dict() -> dict[str, str]:
     # Hard-coded list of game names which are wrongly matched with Levenshtein distance (cf. output/wrong_matches.txt)
 
     return {
@@ -246,19 +248,21 @@ def get_hard_coded_app_id_dict():
     }
 
 
-def check_database_of_problematic_game_names(game_name):
+def check_database_of_problematic_game_names(game_name: str) -> bool:
     hard_coded_dict = get_hard_coded_app_id_dict()
 
     return bool(game_name in hard_coded_dict)
 
 
-def find_hard_coded_app_id(game_name_input):
+def find_hard_coded_app_id(game_name_input: str) -> str:
     hard_coded_dict = get_hard_coded_app_id_dict()
 
     return hard_coded_dict[game_name_input]
 
 
-def adapt_votes_format_for_schulze_computations(normalized_votes):
+def adapt_votes_format_for_schulze_computations(
+    normalized_votes: dict[str, dict],
+) -> tuple[list[str], list[tuple[list[str], int]]]:
     candidate_names = set()
 
     for voter in normalized_votes:
@@ -291,7 +295,9 @@ def adapt_votes_format_for_schulze_computations(normalized_votes):
     return candidate_names, weighted_ranks
 
 
-def compute_schulze_ranking(normalized_votes, steamspy_database):
+def compute_schulze_ranking(
+    normalized_votes: dict[str, dict], steamspy_database: dict[str, dict]
+) -> list[str]:
     # Reference: https://github.com/mgp/schulze-method
 
     (candidate_names, weighted_ranks) = adapt_votes_format_for_schulze_computations(
@@ -305,12 +311,14 @@ def compute_schulze_ranking(normalized_votes, steamspy_database):
     return schulze_ranking
 
 
-def print_schulze_ranking(schulze_ranking, steamspy_database) -> None:
+def print_schulze_ranking(
+    schulze_ranking: list[list[str]], steamspy_database: dict[str, dict]
+) -> None:
     print()
 
     for rank, app_id_group in enumerate(schulze_ranking):
 
-        def get_game_name(app_id):
+        def get_game_name(app_id: str) -> str:
             return steamspy_database[app_id]["name"]
 
         for app_id in sorted(app_id_group, key=get_game_name):
@@ -331,7 +339,9 @@ def print_schulze_ranking(schulze_ranking, steamspy_database) -> None:
             )
 
 
-def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes) -> None:
+def print_ballot_distribution_for_given_appid(
+    app_id_group: list[str], normalized_votes: dict[str, dict]
+) -> None:
     for app_id in app_id_group:
         ballot_distribution = None
 
@@ -351,7 +361,9 @@ def print_ballot_distribution_for_given_appid(app_id_group, normalized_votes) ->
         print("counts of ballots with rank 1, 2, ..., 5:\t", ballot_distribution)
 
 
-def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_year):
+def filter_out_votes_for_wrong_release_years(
+    normalized_votes: dict[str, dict], target_release_year: str
+) -> dict[str, dict]:
     # Objective: remove appID which gathered votes but were not released during the target release year
 
     print()
@@ -396,7 +408,9 @@ def filter_out_votes_for_wrong_release_years(normalized_votes, target_release_ye
     return normalized_votes
 
 
-def compute_steam_era_goty(ballot_year, ballot_filename=None) -> None:
+def compute_steam_era_goty(
+    ballot_year: str, ballot_filename: str | None = None
+) -> None:
     release_year = str(ballot_year)
 
     if ballot_filename is None:

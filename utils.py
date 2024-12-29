@@ -3,7 +3,7 @@
 import steampi.calendar
 
 
-def get_release_year_for_problematic_app_id(app_id):
+def get_release_year_for_problematic_app_id(app_id: str) -> int:
     # As of December 2020, SteamSpy returns release_date_as_str = "29 янв. 2015" for appID = "319630".
     release_date_as_str = steampi.calendar.get_release_date_as_str(app_id=app_id)
     matched_release_year = release_date_as_str.split(" ")[-1]

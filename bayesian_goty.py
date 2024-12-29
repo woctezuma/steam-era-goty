@@ -3,10 +3,10 @@ from pathlib import Path
 
 from compute_bayesian_rating import choose_prior, compute_bayesian_score
 
-EXPECTED_LIST_LENGTH = 2
+EXPECTED_LIST_LENGTH: int = 2
 
 
-def load_input(filename, file_encoding="utf8"):
+def load_input(filename: str, file_encoding: str = "utf8") -> list[str]:
     data = []
 
     with Path(filename).open(encoding=file_encoding) as f:
@@ -19,7 +19,7 @@ def load_input(filename, file_encoding="utf8"):
     return data
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> dict[str, dict]:
     observations = {}
 
     for element in data:
@@ -48,7 +48,7 @@ def parse_data(data):
     return observations
 
 
-def compute_ranking(observations, prior):
+def compute_ranking(observations: dict[str, dict], prior: dict) -> list[str]:
     for game_name, game in observations.items():
         observations[game_name]["bayesian_score"] = compute_bayesian_score(game, prior)
 
@@ -59,7 +59,9 @@ def compute_ranking(observations, prior):
     )
 
 
-def print_ranking(ranking, observations, prior) -> None:
+def print_ranking(
+    ranking: list[str], observations: dict[str, dict], prior: dict
+) -> None:
     print("Game of the Year Votes\n")
 
     for rank, entry in enumerate(ranking):

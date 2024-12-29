@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def choose_prior(observations, *, verbose=False):
+def choose_prior(observations: dict[str, dict], *, verbose: bool = False) -> dict:
     prior = {}
 
     scores = [
@@ -52,7 +52,7 @@ def choose_prior(observations, *, verbose=False):
     return prior
 
 
-def compute_bayesian_score(game, prior):
+def compute_bayesian_score(game: dict, prior: dict) -> float:
     return (prior["num_votes"] * prior["score"] + game["num_votes"] * game["score"]) / (
         prior["num_votes"] + game["num_votes"]
     )
