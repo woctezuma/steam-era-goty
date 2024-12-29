@@ -411,7 +411,7 @@ def filter_out_votes_for_wrong_release_years(
 def compute_steam_era_goty(
     ballot_year: str, ballot_filename: str | None = None
 ) -> None:
-    release_year = str(ballot_year)
+    release_year = ballot_year
 
     if ballot_filename is None:
         ballot_filename = (
