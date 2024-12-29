@@ -4,6 +4,7 @@ import schulze
 import steampi.calendar
 import steampi.text_distances
 import steamspypi.api
+
 from bayesian_goty import load_input
 from utils import get_release_year_for_problematic_app_id
 

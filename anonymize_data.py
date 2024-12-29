@@ -2,8 +2,9 @@ import pathlib
 import re
 from pathlib import Path
 
-from bayesian_goty import load_input
 from faker import Faker
+
+from bayesian_goty import load_input
 
 
 def anonymize(data: list[str], author_name_token_index: int = 0) -> list[str]:
