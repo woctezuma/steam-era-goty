@@ -8,6 +8,9 @@ import steamspypi.api
 from bayesian_goty import load_input
 from utils import get_release_year_for_problematic_app_id
 
+LARGE_DISTANCE = 50
+DICT_FOR_UNKNOWN_APP = {"name": "N/A"}
+
 
 def parse_votes(data: list[str], num_games_per_voter: int = 5) -> dict[str, dict]:
     raw_votes: dict[str, dict] = {}
@@ -142,7 +145,7 @@ def find_closest_app_id(
             num_closest_neighbors,
         )
 
-    closest_distance = [dist[app_id] for app_id in closest_app_id]
+    closest_distance = [dist.get(app_id, LARGE_DISTANCE) for app_id in closest_app_id]
 
     return closest_app_id, closest_distance
 
@@ -175,7 +178,8 @@ def precompute_matches(
                     element["input_name"] = raw_name
                     element["matched_appID"] = closest_app_id
                     element["matched_name"] = [
-                        steamspy_database[appID]["name"] for appID in closest_app_id
+                        steamspy_database.get(appID, DICT_FOR_UNKNOWN_APP)["name"]
+                        for appID in closest_app_id
                     ]
                     element["match_distance"] = closest_distance
 
@@ -321,7 +325,7 @@ def print_schulze_ranking(
     for rank, app_id_group in enumerate(schulze_ranking):
 
         def get_game_name(app_id: str) -> str:
-            return steamspy_database[app_id]["name"]
+            return steamspy_database.get(app_id, DICT_FOR_UNKNOWN_APP)["name"]
 
         for app_id in sorted(app_id_group, key=get_game_name):
             game_name = get_game_name(app_id)
