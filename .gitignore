@@ -1,4 +1,5 @@
 .idea/
 venv/
 __pycache__/
-data/2018*_steamspy.json
+data/20*_steamspy.json
+data/appdetails/appID_*.json
