@@ -1,4 +1,4 @@
-Faker==33.1.2
+Faker==33.3.0
 matplotlib==3.10.0
 numpy==2.2.1
 python-Levenshtein==0.26.1
