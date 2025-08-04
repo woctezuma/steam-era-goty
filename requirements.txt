@@ -1,5 +1,5 @@
 Faker==37.0.1
-matplotlib==3.10.0
+matplotlib==3.10.5
 numpy==2.2.1
 python-Levenshtein==0.26.1
 requests==2.32.3
